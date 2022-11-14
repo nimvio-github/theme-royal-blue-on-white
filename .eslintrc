@@ -1,0 +1,21 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "extends": [
+    "@nuxtjs/eslint-config-typescript",
+    "plugin:prettier/recommended",
+    "plugin:nuxt/recommended"
+  ],
+  "rules": {
+    "vue/no-v-html": "off",
+    "vue/multi-word-component-names": "off",
+    "vue/no-multiple-template-root": "off" // Vue 3 already support multiple template in root
+  }
+}
