@@ -4,6 +4,7 @@
       <h2
         class="p-6 text-4xl font-bold tracking-tight text-royal-blue mt-5 text-center heading-2 text-blue-custom lg-align-left-custom"
         data-kontent-component-id="sectionTitle"
+        data-text="Want More?"
       >
         {{ props.title }}
       </h2>

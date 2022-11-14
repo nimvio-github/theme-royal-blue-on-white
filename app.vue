@@ -32,19 +32,29 @@ const { data } = await useAsyncData("app", async ({ $gqlClient }) => {
 const customStyles = computed(() => {
   const styles = data.value.styles.map((style) => {
     const styleObj = {
+      type: "text/css",
       innerHTML: style.Data.internalCss
         .replace(/<[^>]+>/g, "")
         .replace(/&nbsp;/g, "")
-        .replace(/&quot;/g, '"'),
+        .replace(/&quot;/g, '"')
+        .replace(/&gt;/g, ">"),
     };
     return styleObj;
   });
   return styles;
 });
 
-const customFonts = computed(() => {
-  const fonts = [];
+const customLinks = computed(() => {
+  const links = [];
   data.value.styles.forEach((style) => {
+    // Add style from externalCss
+    if (style.Data.externalCss) {
+      links.push({
+        rel: "stylesheet",
+        as: "style",
+        href: style.Data.externalCss,
+      });
+    }
     const formattedFonts = style.Data.fonts.map((font) => {
       const fontObj = {
         rel: "stylesheet",
@@ -53,9 +63,9 @@ const customFonts = computed(() => {
       };
       return fontObj;
     });
-    fonts.push(...formattedFonts);
+    links.push(...formattedFonts);
   });
-  return fonts;
+  return links;
 });
 
 useHead({
@@ -63,6 +73,6 @@ useHead({
     class: "font-sans text-dark-gray",
   },
   style: [...customStyles.value],
-  link: [...customFonts.value],
+  link: [...customLinks.value],
 });
 </script>

@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ["~/assets/styles/base.css"],
+  css: ["~/assets/styles/base.css", "@splidejs/vue-splide/css"],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@nuxt/image-edge"],
   tailwindcss: {
     exposeConfig: true,

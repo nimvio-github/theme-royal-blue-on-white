@@ -14,6 +14,7 @@ import Hero from "~~/components/page/Hero.vue";
 import ItemBanner from "~~/components/page/ItemBanner.vue";
 import ItemCards from "~~/components/page/ItemCards.vue";
 import ArticleList from "~~/components/page/ArticleList.vue";
+import SliderBanner from "~~/components/page/SliderBanner.vue";
 
 export default {
   props: {
@@ -51,9 +52,7 @@ export default {
         case "ArticleCards":
           return {
             ...webLinkProps,
-            title: componentData.Data.pageTitle
-              ? componentData.Data.pageTitle
-              : "",
+            title: componentData.Data.title ? componentData.Data.title : "",
             link: componentData.Data.link,
             contents: componentData.Data.articles.ContentIDs || [],
           };
@@ -95,6 +94,12 @@ export default {
             ...webLinkProps,
             dataSource: componentData.Data.dataSource.ContentIDs || [],
           };
+        case "SliderBanner":
+          return {
+            ...webLinkProps,
+            contents: componentData.Data.componentItems.ContentIDs || [],
+            sliderOptions: componentData.Data.sliderOptions || "{}",
+          };
         default:
           break;
       }
@@ -114,6 +119,8 @@ export default {
           return ItemCards;
         case "ArticleList":
           return ArticleList;
+        case "SliderBanner":
+          return SliderBanner;
         default:
           break;
       }

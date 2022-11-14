@@ -16,6 +16,7 @@ export type FontTemplate = Template<FontData>;
 type StyleData = {
   styleName: String;
   internalCss: String;
+  externalCss: String;
   fonts: FontTemplate[];
 };
 

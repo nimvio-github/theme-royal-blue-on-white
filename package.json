@@ -13,6 +13,7 @@
     "@nuxt/image-edge": "^1.0.0-27719579.87dcdf2",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@nuxtjs/tailwindcss": "^5.3.3",
+    "@splidejs/vue-splide": "^0.6.12",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.7",
     "eslint": "^8.23.1",
