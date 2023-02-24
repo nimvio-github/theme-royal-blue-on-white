@@ -1,12 +1,12 @@
 <template>
-  <section class="bg-light-white" v-bind="webLinkProps">
-    <nav class="relative container h-24 mx-auto flex items-center flex-wrap">
+  <section class="navbar" v-bind="webLinkProps">
+    <nav class="container navbar__wrapper">
       <div>
-        <NuxtLink v-if="data.logo" to="/">
+        <NuxtLink v-if="props.logo" to="/">
           <nuxt-img
-            :src="data.logo"
-            :alt="data.logoAlt || 'logo'"
-            class="max-h-8 h-auto w-auto"
+            :src="props.logo"
+            :alt="props.logoAlt || 'website logo'"
+            class="navbar__logo"
             height="32"
             width="165"
             format="webp"
@@ -14,15 +14,17 @@
           />
         </NuxtLink>
       </div>
-      <div class="flex flex-grow"></div>
+
+      <div class="navbar__menu-separator"></div>
+
       <!-- Desktop -->
-      <div class="hidden lg:flex items-center mx-4 gap-8 h-full">
+      <div class="navbar__links">
         <template v-for="item in data.items">
           <header-nav-item
-            v-if="item"
-            :key="item.text"
-            :data-kontent-item-id="item.ContentID"
-            :data-kontent-element-codename="item.TemplateName"
+            v-if="item && item.isShow"
+            :key="item.id"
+            :data-nimvio-content-id="item.ContentID"
+            :data-nimvio-template-name="item.TemplateName"
             :text="item.text"
             :to="item.to"
             :nav-childs="item.children"
@@ -56,11 +58,11 @@
       <div class="container mx-auto py-8 flex flex-col gap-4">
         <template v-for="item in data.items">
           <header-nav-item
-            v-if="item"
-            :key="item.text"
+            v-if="item && item.isShow"
+            :key="item.id"
             :text="item.text"
-            :data-kontent-item-id="item.ContentID"
-            :data-kontent-element-codename="item.TemplateName"
+            :data-nimvio-content-id="item.ContentID"
+            :data-nimvio-template-name="item.TemplateName"
             :to="item.to"
             :nav-childs="item.children"
           />
@@ -71,45 +73,71 @@
 </template>
 
 <script setup>
-import { useAttrs } from "vue";
-import { getContentById, getChildPages } from "~~/utils/dataFetching";
+import { getChildPages } from "~~/utils/dataFetching";
 
-const attrs = useAttrs();
-
-const { datasource } = attrs;
-const datasourceId = datasource.ContentIDs[0];
+const { public: config } = useRuntimeConfig();
 
 const webLinkProps = {
-  "data-kontent-item-id": datasourceId,
-  "data-kontent-element-codename": "Header Bar",
+  "data-nimvio-content-id": config.header.navContentId,
+  "data-nimvio-template-name": "Header Nav",
 };
 
+const props = defineProps({
+  navigationItemsId: {
+    type: String,
+    required: true,
+  },
+  logo: {
+    type: String,
+    required: true,
+  },
+  logoAlt: {
+    type: String,
+    default: "",
+  },
+});
+
 const { data } = await useAsyncData("headerBar", async ({ $gqlClient }) => {
-  const { data: response } = await getContentById($gqlClient, datasourceId);
-
-  const navigableItemsId = response.Data.navigationItems.ContentIDs[0];
-
-  const { data: pages } = await getChildPages($gqlClient, navigableItemsId);
+  const { data: pages } = await getChildPages(
+    $gqlClient,
+    props.navigationItemsId
+  );
 
   const items = pages.map((page) => {
     const pageData = page.Data;
-
-    if (!pageData.navigation.showInMenu) return null;
 
     return {
       text: pageData.navigationTitle || pageData.pageTitle,
       to: pageData.pageSlug,
       navigationTitle: pageData.navigationTitle,
       children: [],
+      isShow: pageData.navigation.showInMenu,
       ...page,
     };
   });
 
   return {
     items,
-    logo: response.Data.logo?.MediaUrl,
-    logoAlt: response.Data.logo?.AltText,
   };
+});
+
+const { $nimvioSdk } = useNuxtApp();
+onBeforeMount(() => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+    data.value.items = data.value.items.map((item) => {
+      if (item.ContentID === formData.id) {
+        return {
+          ...item,
+          text:
+            formData.formData.navigationTitle || formData.formData.pageTitle,
+          to: formData.formData.urlPath,
+          navigationTitle: formData.formData.navigationTitle,
+          isShow: formData.formData.navigation.showInMenu,
+        };
+      }
+      return item;
+    });
+  });
 });
 
 const state = reactive({
@@ -117,3 +145,45 @@ const state = reactive({
   searchOpen: false,
 });
 </script>
+
+<style lang="scss">
+.navbar {
+  background-color: $nimvio-white;
+}
+
+.navbar__wrapper {
+  display: flex;
+  position: relative;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 6rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.navbar__logo {
+  width: auto;
+  max-height: 2rem;
+  height: auto;
+}
+
+.navbar__menu-separator {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navbar__links {
+  display: none;
+  gap: 2rem;
+  align-items: center;
+  height: 100%;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .navbar__links {
+    display: flex;
+  }
+}
+</style>

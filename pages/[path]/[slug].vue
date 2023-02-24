@@ -1,68 +1,90 @@
 <template>
   <NuxtLayout
-    :name="data.layoutData.layoutName"
-    :page-data="data.pageData"
-    :placeholders="data.placeholders"
-    :template-name="data.templateName"
-    :page-components="data.components"
+    :name="data.Data.layout[0].Data.layoutName"
+    :placeholders="data.Data.layout[0].Data.placeholders"
   >
+    <template #main>
+      <common-breadcrumb />
+      <LazyCommonRefetchButton @click="refresh">
+        {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
+      </LazyCommonRefetchButton>
+      <!-- content for the main slot -->
+      <component-renderer
+        v-if="data.TemplateName === 'Page Article'"
+        :components="[data]"
+      ></component-renderer>
+      <component-renderer
+        v-else-if="
+          data.TemplateName !== 'Page Article' && data.Data.widgetContent
+        "
+        :components="data.Data.widgetContent"
+      ></component-renderer>
+    </template>
   </NuxtLayout>
 </template>
 
 <script setup>
-import {
-  getContentByPageSlug,
-  getMultipleContents,
-  getContentById,
-} from "~~/utils/dataFetching";
+import { getContentByPageSlug } from "~~/utils/dataFetching";
 
 const route = useRoute();
-const { data } = await useAsyncData(
-  route.params.slug,
+const currentPath = route.path;
+
+const { data, refresh, pending } = await useAsyncData(
+  currentPath,
   async ({ $gqlClient }) => {
     const { data: response } = await getContentByPageSlug(
       $gqlClient,
-      route.params.slug
+      currentPath,
+      {
+        deep: true,
+      }
     );
-    const pageData = response.Data;
-    const layoutId = pageData.layout.ContentIDs[0];
-
-    let layout = null;
-    if (layoutId) {
-      const { data: content } = await getContentById($gqlClient, layoutId);
-      layout = content;
-    }
-
-    const placeholderIds = layout.Data.placeholders.ContentIDs;
-    const placeholders = placeholderIds.map(async (id) => {
-      const { data: response } = await getContentById($gqlClient, id);
-      return response;
-    });
-
-    if (response.TemplateName === "Page Article") {
-      return {
-        pageData,
-        components: [response],
-        layoutData: layout ? layout.Data : {},
-        placeholders: await Promise.all(placeholders),
-        templateName: response.TemplateName,
-      };
-    }
-
-    const pageComponentIds = pageData.pageComponents.ContentIDs || [];
-    const { data: pageComponents } = await getMultipleContents(
-      $gqlClient,
-      pageComponentIds
-    );
-
-    return {
-      pageData,
-      components: pageComponents,
-    };
+    return response;
   }
 );
-useHead({
-  title: data.value?.pageData.pageTitle,
+
+const updateContentById = (content, id, newContent, cache = {}) => {
+  if (cache[content.ContentID]) return null;
+  cache[content.ContentID] = true;
+  if (content.ContentID === id) {
+    content.Data = newContent;
+    return content;
+  }
+  const componentDataKeys = Object.keys(content.Data);
+  for (let i = 0; i < componentDataKeys.length; i++) {
+    const componentDataKey = componentDataKeys[i];
+    if (Array.isArray(content.Data[componentDataKey])) {
+      for (let j = 0; j < content.Data[componentDataKey].length; j++) {
+        const found = updateContentById(
+          content.Data[componentDataKey][j],
+          id,
+          newContent,
+          cache
+        );
+        if (found) {
+          content.Data[componentDataKey][j] = found;
+        }
+      }
+    }
+  }
+  return content;
+};
+
+const { $nimvioSdk } = useNuxtApp();
+onBeforeMount(() => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+    const newContent = updateContentById(
+      data.value,
+      formData.id,
+      formData.formData
+    );
+    if (newContent) {
+      data.value = newContent;
+    }
+  });
 });
-// const refresh = () => refreshNuxtData(route.params.path);
+
+// useHead({
+//   title: data.value?.Data.pageTitle,
+// });
 </script>

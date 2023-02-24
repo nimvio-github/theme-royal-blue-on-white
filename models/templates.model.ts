@@ -22,7 +22,7 @@ type StyleData = {
 
 export type StyleTemplate = Template<StyleData>;
 
-type StylesData = {
+export type StylesData = {
   stylesName: String;
   styles: StyleTemplate[];
 };

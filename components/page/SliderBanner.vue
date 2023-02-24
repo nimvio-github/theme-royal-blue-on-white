@@ -1,14 +1,12 @@
 <template>
   <Splide :data-splide="sliderOptions" aria-labelledby="basic-example-heading">
-    <SplideSlide v-for="component in components" :key="component.ContentID">
+    <SplideSlide v-for="component in props.contents" :key="component.ContentID">
       <PageHero v-bind="getComponentProps(component)"></PageHero>
     </SplideSlide>
   </Splide>
 </template>
 
 <script setup>
-import { getMultipleContents } from "~~/utils/dataFetching";
-
 const props = defineProps({
   contents: {
     type: Array,
@@ -20,24 +18,10 @@ const props = defineProps({
   },
 });
 
-const route = useRoute();
-
-// Fetch Contents Data
-const { data: components } = await useAsyncData(
-  `sliderBanner-${route.fullPath}`,
-  async ({ $gqlClient }) => {
-    const { data: pageComponents } = await getMultipleContents(
-      $gqlClient,
-      props.contents
-    );
-    return pageComponents;
-  }
-);
-
 const getComponentProps = (componentData) => {
   const webLinkProps = {
-    "data-kontent-item-id": componentData.ContentID,
-    "data-kontent-element-codename": componentData.TemplateName,
+    "data-nimvio-content-id": componentData.ContentID,
+    "data-nimvio-template-name": componentData.TemplateName,
     class: "h-full",
   };
   return {

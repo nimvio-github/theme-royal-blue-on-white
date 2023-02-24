@@ -10,7 +10,10 @@ interface ContentResponse<TemplateData> {
 
 type fetchOptions = {
   deep: Boolean;
+  cache?: any;
 };
+
+const globalCache = {};
 
 /**
  * Get Content data By ContentID
@@ -39,7 +42,9 @@ export const getContentById = async <TemplateData>(
     const response = await $client.request<
       ContentResponse<[ContentResponse<TemplateData>]>
     >(query);
-    if (option && option.deep) {
+    if (option && option.deep && response[0] && response[0].Data) {
+      const referenceCache = option.cache || globalCache;
+      referenceCache[id] = response[0];
       const responseData = response[0].Data;
       const responseDataKey = Object.keys(responseData);
       // Recursively fetch Reference Content
@@ -52,10 +57,16 @@ export const getContentById = async <TemplateData>(
         ) {
           responseData[key] = await Promise.all(
             responseData[key].ContentIDs.map(async (contentId) => {
-              const { data } = await getContentById($client, contentId, {
-                deep: true,
-              });
-              return data;
+              if (referenceCache[contentId]) {
+                return referenceCache[contentId];
+              } else {
+                const { data } = await getContentById($client, contentId, {
+                  deep: true,
+                  cache: referenceCache,
+                });
+                referenceCache[contentId] = data;
+                return data;
+              }
             })
           );
         }
@@ -109,12 +120,14 @@ export const getChildPages = async (
  */
 export const getContentByPageSlug = async (
   $client: GraphQLClient,
-  slug: string
+  slug: string,
+  option?: fetchOptions
 ) => {
+  // TODO: Change urlPath into pageSlug after the BE is finished on updating the text slug component validation
   try {
     const query = gql`
       query getContentByPageSlug {
-        content(templateName: "Page", data: {pageSlug: "${slug}"}) {
+        content(templateName: "Page", data: {urlPath: "${slug}"}) {
           Name
           ContentID
           Data
@@ -126,6 +139,37 @@ export const getContentByPageSlug = async (
     const response = await $client.request<
       ContentResponse<[ContentResponse<any>]>
     >(query);
+    if (option && option.deep && response[0] && response[0].Data) {
+      const referenceCache = option.cache || globalCache;
+      const id = response[0].ContentID;
+      referenceCache[id] = response[0];
+      const responseData = response[0].Data;
+      const responseDataKey = Object.keys(responseData);
+      // Recursively fetch Reference Content
+      for (const key of responseDataKey) {
+        if (
+          typeof responseData[key] === "object" &&
+          responseData[key].Type === "Reference" &&
+          responseData[key].ReferenceType === "Content" &&
+          Array.isArray(responseData[key].ContentIDs)
+        ) {
+          responseData[key] = await Promise.all(
+            responseData[key].ContentIDs.map(async (contentId) => {
+              if (referenceCache[contentId]) {
+                return referenceCache[contentId];
+              } else {
+                const { data } = await getContentById($client, contentId, {
+                  deep: true,
+                  cache: referenceCache,
+                });
+                referenceCache[contentId] = data;
+                return data;
+              }
+            })
+          );
+        }
+      }
+    }
     return { data: response[0] };
   } catch (error) {
     console.log("error fetching slug ", slug, error);

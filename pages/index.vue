@@ -1,73 +1,85 @@
 <template>
   <NuxtLayout
-    :name="data.layoutData.layoutName"
-    :page-data="data.pageData"
-    :placeholders="data.placeholders"
-    :template-name="data.templateName"
-    :page-components="data.components"
+    :name="data.Data.layout[0].Data.layoutName"
+    :placeholders="data.Data.layout[0].Data.placeholders"
   >
+    <template #main>
+      <LazyCommonRefetchButton @click="refresh">
+        {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
+      </LazyCommonRefetchButton>
+      <!-- content for the main slot -->
+      <component-renderer
+        v-if="data.Data.widgetContent"
+        :components="data.Data.widgetContent"
+      ></component-renderer>
+    </template>
   </NuxtLayout>
 </template>
 
 <script setup>
-import { getContentById } from "~~/utils/dataFetching";
-import getFullSlug from "~~/composables/getFullSlug";
+import { getContentByPageSlug } from "~~/utils/dataFetching";
 
-// Get the content from Nimvio via ContentID instead of pageSlug
-const { contentId } = getFullSlug();
+const route = useRoute();
+const currentPath = route.path === "/" ? "/home" : route.path;
 
-const { data } = await useAsyncData(contentId, async ({ $gqlClient }) => {
-  const { data: response } = await getContentById($gqlClient, contentId);
-
-  const pageData = response.Data;
-  const layoutId = pageData.layout.ContentIDs[0];
-  let layout = null;
-  if (layoutId) {
-    const { data: content } = await getContentById($gqlClient, layoutId);
-    layout = content;
-  }
-
-  const widgetIds = pageData.widgetContent.ContentIDs;
-
-  const placeholderIds = layout.Data.placeholders.ContentIDs;
-  const placeholders = placeholderIds.map(async (id) => {
-    const { data: response } = await getContentById($gqlClient, id);
-    return response;
-  });
-
-  const pageWidgets = widgetIds.map(async (id) => {
-    const { data: content } = await getContentById($gqlClient, id);
-    return content;
-  });
-
-  return {
-    pageData,
-    components: await Promise.all(pageWidgets),
-    layoutData: layout ? layout.Data : {},
-    placeholders: await Promise.all(placeholders),
-    templateName: response.TemplateName,
-  };
-});
-
-const { $onPreviewChange } = useNuxtApp();
-onMounted(() => {
-  $onPreviewChange((formData) => {
-    // eslint-disable-next-line no-console
-    console.log("onPreviewChange", formData);
-    data.value.components = data.value.components.map((component) => {
-      if (component.ContentID === formData.id) {
-        component.Data = formData.formData;
+const { data, refresh, pending } = await useAsyncData(
+  route.path,
+  async ({ $gqlClient }) => {
+    const { data: response } = await getContentByPageSlug(
+      $gqlClient,
+      currentPath,
+      {
+        deep: true,
       }
-      return component;
-    });
+    );
+    return response;
+  }
+);
+
+const updateContentById = (content, id, newContent, cache = {}) => {
+  if (cache[content.ContentID]) return null;
+  cache[content.ContentID] = true;
+  if (content.ContentID === id) {
+    content.Data = newContent;
+    return content;
+  }
+  const componentDataKeys = Object.keys(content.Data);
+  for (let i = 0; i < componentDataKeys.length; i++) {
+    const componentDataKey = componentDataKeys[i];
+    if (Array.isArray(content.Data[componentDataKey])) {
+      for (let j = 0; j < content.Data[componentDataKey].length; j++) {
+        const found = updateContentById(
+          content.Data[componentDataKey][j],
+          id,
+          newContent,
+          cache
+        );
+        if (found) {
+          content.Data[componentDataKey][j] = found;
+        }
+      }
+    }
+  }
+  return content;
+};
+
+const { $nimvioSdk } = useNuxtApp();
+onBeforeMount(() => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+    const newContent = updateContentById(
+      data.value,
+      formData.id,
+      formData.formData
+    );
+    if (newContent) {
+      data.value = newContent;
+    }
   });
 });
 
 useHead({
-  title: data.value?.pageData.pageTitle,
+  title: data.value?.Data.pageTitle,
 });
-
-// const refresh = () => refreshNuxtData("page");
 </script>
 
 <script>

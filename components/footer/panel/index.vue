@@ -4,8 +4,8 @@
       <NuxtLink
         v-for="link in data.policyContents"
         :key="link.text"
-        :data-kontent-item-id="link.ContentID"
-        :data-kontent-element-codename="link.TemplateName"
+        :data-nimvio-content-id="link.ContentID"
+        :data-nimvio-template-name="link.TemplateName"
         class="font-bold hover:text-light-white"
         :to="`/${link.to}`"
         >{{ link.text }}
@@ -33,8 +33,8 @@ import { getContentById } from "~~/utils/dataFetching";
 const { public: config } = useRuntimeConfig();
 
 const webLinkProps = {
-  "data-kontent-item-id": config.footer.panelContentId,
-  "data-kontent-element-codename": "Footer Panel",
+  "data-nimvio-content-id": config.footer.panelContentId,
+  "data-nimvio-template-name": "Footer Panel",
 };
 
 const { data } = await useAsyncData("footerPanel", async ({ $gqlClient }) => {

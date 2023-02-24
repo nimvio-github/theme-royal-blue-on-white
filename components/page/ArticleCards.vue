@@ -13,10 +13,10 @@
         class="p-6 flex flex-wrap justify-around mt-12 gap-y-12 gap-x-4"
       >
         <page-article-card
-          v-for="component in components"
+          v-for="component in props.contents"
           :key="component.ContentID"
-          :data-kontent-element-codename="component.TemplateName"
-          :data-kontent-item-id="component.ContentID"
+          :data-nimvio-template-name="component.TemplateName"
+          :data-nimvio-content-id="component.ContentID"
           :to="`${link}/${component.Data.pageSlug}`"
           :category="component.Data.category"
           :title="component.Data.pageTitle"
@@ -24,7 +24,10 @@
         >
         </page-article-card>
       </div>
-      <div v-if="components && components.length" class="mt-8 text-center">
+      <div
+        v-if="props.contents && props.contents.length"
+        class="mt-8 text-center"
+      >
         <common-text-link
           data-kontent-component-id="link"
           :to="link"
@@ -37,7 +40,7 @@
 </template>
 
 <script setup>
-import { getMultipleContents } from "~~/utils/dataFetching";
+// import { getMultipleContents } from "~~/utils/dataFetching";
 
 const props = defineProps({
   title: {
@@ -54,17 +57,17 @@ const props = defineProps({
   },
 });
 
-const route = useRoute();
+// const route = useRoute();
 
-// Fetch Contents Data
-const { data: components } = await useAsyncData(
-  `articleCards-${route.fullPath}`,
-  async ({ $gqlClient }) => {
-    const { data: pageComponents } = await getMultipleContents(
-      $gqlClient,
-      props.contents
-    );
-    return pageComponents;
-  }
-);
+// // Fetch Contents Data
+// const { data: components } = await useAsyncData(
+//   `articleCards-${route.fullPath}`,
+//   async ({ $gqlClient }) => {
+//     const { data: pageComponents } = await getMultipleContents(
+//       $gqlClient,
+//       props.contents
+//     );
+//     return pageComponents;
+//   }
+// );
 </script>

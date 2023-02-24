@@ -5,14 +5,18 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "generate:preview": "nuxt generate --dotenv .env.preview",
+    "generate:prod": "nuxt generate --dotenv .env.prod",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint"
   },
   "devDependencies": {
+    "@nimvio/live-preview-sdk": "^0.1.1",
     "@nuxt/image-edge": "^1.0.0-27719579.87dcdf2",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
-    "@nuxtjs/tailwindcss": "^5.3.3",
+    "@nuxtjs/style-resources": "^1.2.1",
+    "@nuxtjs/tailwindcss": "^6.3.1",
     "@splidejs/vue-splide": "^0.6.12",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@tailwindcss/typography": "^0.5.7",
@@ -22,9 +26,11 @@
     "eslint-plugin-prettier": "^4.2.1",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
-    "nuxt": "^3.0.0-rc.12",
+    "nuxt": "3.1.1",
     "nuxt-icon": "^0.1.5",
     "prettier": "^2.7.1",
+    "sass": "^1.56.1",
+    "sass-loader": "^13.2.0",
     "typescript": "^4.8.3"
   }
 }

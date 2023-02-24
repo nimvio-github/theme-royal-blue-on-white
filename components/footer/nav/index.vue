@@ -10,8 +10,8 @@
           v-for="social in data.socialLinks"
           :key="social.name"
           :icon-name="social.name"
-          :data-kontent-item-id="social.ContentID"
-          :data-kontent-element-codename="social.TemplateName"
+          :data-nimvio-content-id="social.ContentID"
+          :data-nimvio-template-name="social.TemplateName"
           icon-size="1.5em"
           :to="social.to"
           target="_blank"
@@ -26,8 +26,8 @@
       <footer-nav-item
         v-for="item in data.items"
         :key="item.text"
-        :data-kontent-item-id="item.ContentID"
-        :data-kontent-element-codename="item.TemplateName"
+        :data-nimvio-content-id="item.ContentID"
+        :data-nimvio-template-name="item.TemplateName"
         :text="item.text"
         :to="item.to"
         :nav-childs="item.children"
@@ -43,8 +43,8 @@ import { getChildPages, getContentById } from "~~/utils/dataFetching";
 const { public: config } = useRuntimeConfig();
 
 const webLinkProps = {
-  "data-kontent-item-id": config.footer.navContentId,
-  "data-kontent-element-codename": "Footer Nav",
+  "data-nimvio-content-id": config.footer.navContentId,
+  "data-nimvio-template-name": "Footer Nav",
 };
 
 const { data } = await useAsyncData("footerNav", async ({ $gqlClient }) => {

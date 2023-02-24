@@ -17,10 +17,10 @@
           data-kontent-component-id="dataSource"
         >
           <div
-            v-for="component in components"
+            v-for="component in props.contents"
             :key="component.ContentID"
-            :data-kontent-item-id="component.ContentID"
-            :data-kontent-element-codename="component.TemplateName"
+            :data-nimvio-content-id="component.ContentID"
+            :data-nimvio-template-name="component.TemplateName"
             class="w-80 white-card-custom"
           >
             <div
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { getMultipleContents } from "~~/utils/dataFetching";
+// import { getMultipleContents } from "~~/utils/dataFetching";
 
 const props = defineProps({
   title: {
@@ -73,17 +73,17 @@ const props = defineProps({
 });
 
 const { $img } = useNuxtApp();
-const route = useRoute();
+// const route = useRoute();
 
-// Fetch Contents Data
-const { data: components } = await useAsyncData(
-  `itemCards-${route.fullPath}`,
-  async ({ $gqlClient }) => {
-    const { data: pageComponents } = await getMultipleContents(
-      $gqlClient,
-      props.contents
-    );
-    return pageComponents;
-  }
-);
+// // Fetch Contents Data
+// const { data: components } = await useAsyncData(
+//   `itemCards-${route.fullPath}`,
+//   async ({ $gqlClient }) => {
+//     const { data: pageComponents } = await getMultipleContents(
+//       $gqlClient,
+//       props.contents
+//     );
+//     return pageComponents;
+//   }
+// );
 </script>

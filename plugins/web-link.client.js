@@ -1,10 +1,13 @@
-import WebLink from "~~/lib/web-link/index";
+import WebLink from "@nimvio/live-preview-sdk";
 
 export default defineNuxtPlugin(() => {
-  const webLink = WebLink.init();
+  const nimvioSdk = WebLink.init({
+    queryParam: "testing",
+  });
+
   return {
     provide: {
-      onPreviewChange: webLink.addOnChangeHandler,
+      nimvioSdk,
     },
   };
 });

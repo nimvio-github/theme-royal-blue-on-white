@@ -15,6 +15,11 @@ import ItemBanner from "~~/components/page/ItemBanner.vue";
 import ItemCards from "~~/components/page/ItemCards.vue";
 import ArticleList from "~~/components/page/ArticleList.vue";
 import SliderBanner from "~~/components/page/SliderBanner.vue";
+import Search from "~~/components/page/Search.vue";
+import HeaderBar from "~~/components/widgets/header-bar.vue";
+import HeaderPanel from "~~/components/widgets/header-panel.vue";
+import FooterBar from "~~/components/widgets/footer-bar.vue";
+import FooterPanel from "~~/components/widgets/footer-panel.vue";
 
 export default {
   props: {
@@ -26,8 +31,8 @@ export default {
   methods: {
     getComponentProps(componentData) {
       const webLinkProps = {
-        "data-kontent-item-id": componentData.ContentID,
-        "data-kontent-element-codename": componentData.TemplateName,
+        "data-nimvio-content-id": componentData.ContentID,
+        "data-nimvio-template-name": componentData.TemplateName,
       };
       switch (componentData.TemplateName) {
         case "Page Article":
@@ -54,7 +59,7 @@ export default {
             ...webLinkProps,
             title: componentData.Data.title ? componentData.Data.title : "",
             link: componentData.Data.link,
-            contents: componentData.Data.articles.ContentIDs || [],
+            contents: componentData.Data.articles || [],
           };
         case "HeroBanner":
           return {
@@ -87,18 +92,49 @@ export default {
           return {
             ...webLinkProps,
             title: componentData.Data.title,
-            contents: componentData.Data.itemCards.ContentIDs || [],
+            contents: componentData.Data.itemCards || [],
           };
         case "ArticleList":
           return {
             ...webLinkProps,
-            dataSource: componentData.Data.dataSource.ContentIDs || [],
+            dataSource: componentData.Data.dataSource || [],
           };
         case "SliderBanner":
           return {
             ...webLinkProps,
-            contents: componentData.Data.componentItems.ContentIDs || [],
+            contents: componentData.Data.componentItems || [],
             sliderOptions: componentData.Data.sliderOptions || "{}",
+          };
+        case "Header Bar":
+          return {
+            ...webLinkProps,
+            logo: componentData.Data.logo?.MediaUrl,
+            logoAlt: componentData.Data.logo?.AltText,
+            navigationItemsId: componentData.Data.navigationItems[0].ContentID,
+          };
+        case "Header Panel":
+          return {
+            ...webLinkProps,
+            logo: componentData.Data.image?.MediaUrl,
+            logoAlt: componentData.Data.image?.AltText,
+            description: componentData.Data.description,
+          };
+        case "Footer Bar":
+          return {
+            ...webLinkProps,
+            navigationItemsId: componentData.Data.navigationItems[0].ContentID,
+            title: componentData.Data.websiteName,
+            socialLinks: componentData.Data.socialMediaLinks,
+          };
+        case "Footer Panel":
+          return {
+            ...webLinkProps,
+            policyContents: componentData.Data.policyContents,
+            copyrightName: componentData.Data.copyrightName,
+          };
+        case "Search":
+          return {
+            ...webLinkProps,
           };
         default:
           break;
@@ -121,6 +157,16 @@ export default {
           return ArticleList;
         case "SliderBanner":
           return SliderBanner;
+        case "Header Bar":
+          return HeaderBar;
+        case "Header Panel":
+          return HeaderPanel;
+        case "Footer Bar":
+          return FooterBar;
+        case "Footer Panel":
+          return FooterPanel;
+        case "Search":
+          return Search;
         default:
           break;
       }

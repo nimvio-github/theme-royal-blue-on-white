@@ -1,38 +1,57 @@
 <template>
-  <section class="h-8 bg-light-gray" v-bind="webLinkProps">
-    <div class="container mx-auto h-full flex items-center">
+  <section class="masthead" v-bind="webLinkProps">
+    <div class="container masthead__logo">
       <nuxt-img
-        :src="data.logo"
-        :alt="data.logoAlt || 'panel-logo'"
+        :src="props.logo"
+        :alt="props.logoAlt || 'masthead logo'"
         width="16"
         height="16"
       />
-      <div class="pl-2 text-dark-gray" v-html="data.description"></div>
+      <div class="masthead__text" v-html="props.description"></div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { useAttrs } from "vue";
-import { getContentById } from "~~/utils/dataFetching";
+const { public: config } = useRuntimeConfig();
 
-const attrs = useAttrs();
-
-const { datasource } = attrs;
-const datasourceId = datasource.ContentIDs[0];
+const props = defineProps({
+  logo: {
+    type: String,
+    required: true,
+  },
+  logoAlt: {
+    type: String,
+    default: "",
+  },
+  description: {
+    type: String,
+    default: "",
+  },
+});
 
 const webLinkProps = {
-  "data-kontent-item-id": datasourceId,
-  "data-kontent-element-codename": "Header Panel",
+  "data-nimvio-content-id": config.header.panelContentId,
+  "data-nimvio-template-name": "Header Panel",
 };
-
-const { data } = await useAsyncData("headerPanel", async ({ $gqlClient }) => {
-  const { data: response } = await getContentById($gqlClient, datasourceId);
-
-  return {
-    logo: response.Data.image?.MediaUrl,
-    logoAlt: response.Data.image?.AltText,
-    description: response.Data.description,
-  };
-});
 </script>
+
+<style lang="scss">
+.masthead {
+  background-color: $nimvio-light;
+  height: 2rem;
+}
+
+.masthead__logo {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  height: 100%;
+}
+
+.masthead__text {
+  color: $nimvio-black;
+  padding-left: 0.5rem;
+}
+</style>

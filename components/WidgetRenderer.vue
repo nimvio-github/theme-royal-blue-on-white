@@ -42,8 +42,8 @@ export default {
     },
     getComponentProps(componentData) {
       const webLinkProps = {
-        "data-kontent-item-id": componentData.ContentID,
-        "data-kontent-element-codename": componentData.TemplateName,
+        "data-nimvio-content-id": componentData.ContentID,
+        "data-nimvio-template-name": componentData.TemplateName,
       };
       switch (componentData.TemplateName) {
         case "Widget":

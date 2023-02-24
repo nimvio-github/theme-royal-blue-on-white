@@ -46,9 +46,9 @@
         <page-article-card
           v-for="component in paginate.contents"
           :key="component.ContentID"
-          :data-kontent-element-codename="component.TemplateName"
-          :data-kontent-item-id="component.ContentID"
-          :to="`${route.fullPath}/${component.Data.pageSlug}`"
+          :data-nimvio-template-name="component.TemplateName"
+          :data-nimvio-content-id="component.ContentID"
+          :to="`${route.path}/${component.Data.pageSlug}`"
           :category="component.Data.category"
           :title="component.Data.pageTitle"
           :published-at="component.PublishedAt"
@@ -80,11 +80,14 @@ const route = useRoute();
 
 // Fetch Contents Data
 const { data } = await useAsyncData(
-  `articleList-${route.fullPath}`,
+  `articleList-${route.path}`,
   async ({ $gqlClient }) => {
     let contents = [];
-    const pageComponents = props.dataSource.map(async (id) => {
-      const { data: componentData } = await getChildPages($gqlClient, id);
+    const pageComponents = props.dataSource.map(async (source) => {
+      const { data: componentData } = await getChildPages(
+        $gqlClient,
+        source.ContentID
+      );
       contents = contents.concat(componentData);
       return componentData;
     });
@@ -92,6 +95,18 @@ const { data } = await useAsyncData(
     return contents;
   }
 );
+
+const { $nimvioSdk } = useNuxtApp();
+onBeforeMount(() => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+    state.contents = state.contents.map((item) => {
+      if (item.ContentID === formData.id) {
+        item.Data = formData.formData;
+      }
+      return item;
+    });
+  });
+});
 
 const state = reactive({
   selectedCategory: "All",
@@ -129,7 +144,9 @@ const paginate = computed(() => {
 
 // Set contents after data has been retrieved
 watch(data, ({ value }) => {
-  state.contents = [...value];
+  if (value && value.length) {
+    state.contents = [...value];
+  }
 });
 
 const sortContents = (a, b) => {
