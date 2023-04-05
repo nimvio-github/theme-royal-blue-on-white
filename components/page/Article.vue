@@ -1,5 +1,5 @@
 <template>
-  <article v-if="!props.visibility.hidden" class="py-8 md:py-12">
+  <article v-if="!props.visibility?.hidden" class="py-8 md:py-12">
     <common-container>
       <div class="flex items-center flex-wrap gap-8 mb-8 md:mb-12">
         <p

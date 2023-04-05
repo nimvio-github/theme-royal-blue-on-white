@@ -35,8 +35,8 @@ const { data, refresh, pending } = await useAsyncData(
         }
       );
 
-      const { widgetContent } = newResponse.Data;
-      widgetContent.unshift(omit(clone(newResponse), "Data.widgetContent"));
+      const widgetContent = newResponse.Data.widgets;
+      widgetContent.unshift(omit(clone(newResponse), "Data.widgets"));
 
       const widgets = groupBy(widgetContent, "Data.placeholder");
       return { ...newResponse, widgets };
@@ -49,8 +49,8 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    const { widgetContent } = response.Data;
-    widgetContent.unshift(omit(clone(response), "Data.widgetContent"));
+    const widgetContent = response.Data.widgets;
+    widgetContent.unshift(omit(clone(response), "Data.widgets"));
 
     const widgets = groupBy(widgetContent, "Data.placeholder");
     return {

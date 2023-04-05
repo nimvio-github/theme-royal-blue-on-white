@@ -47,8 +47,6 @@
 </template>
 
 <script setup>
-// import config from "~~/helpers/config";
-
 const { public: config } = useRuntimeConfig();
 const route = useRoute();
 

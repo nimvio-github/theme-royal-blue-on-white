@@ -15,7 +15,7 @@ import ItemBanner from "~~/components/widgets/item-banner.vue";
 import ItemCards from "~~/components/widgets/item-cards.vue";
 import ArticleList from "~~/components/widgets/article-list.vue";
 import SliderBanner from "~~/components/widgets/slider-banner.vue";
-import Search from "~~/components/page/Search.vue";
+import Search from "~~/components/widgets/search.vue";
 import HeaderBar from "~~/components/widgets/header-bar.vue";
 import HeaderPanel from "~~/components/widgets/header-panel.vue";
 import Breadcrumb from "~~/components/widgets/breadcrumb.vue";

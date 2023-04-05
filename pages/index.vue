@@ -31,7 +31,7 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    const widgets = groupBy(response.Data.widgetContent, "Data.placeholder");
+    const widgets = groupBy(response.Data.widgets, "Data.placeholder");
     return { ...response, widgets };
   }
 );

@@ -21,9 +21,7 @@
 <script setup>
 useHead({
   titleTemplate: (titleChunk) => {
-    return titleChunk
-      ? `${titleChunk} - Nimvio Demo Website`
-      : "Nimvio Demo Website";
+    return titleChunk ? `${titleChunk}` : "Nimvio Website";
   },
 });
 </script>
