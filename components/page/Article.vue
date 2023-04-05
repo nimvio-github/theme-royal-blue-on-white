@@ -1,10 +1,7 @@
 <template>
-  <article class="py-8 md:py-12">
+  <article v-if="!props.visibility.hidden" class="py-8 md:py-12">
     <common-container>
       <div class="flex items-center flex-wrap gap-8 mb-8 md:mb-12">
-        <!-- <common-text-link v-if="props.category" to="/blog">{{
-          props.category
-        }}</common-text-link> -->
         <p
           v-if="props.category"
           class="uppercase font-semibold"
@@ -101,6 +98,10 @@ const props = defineProps({
   },
   content: {
     type: String,
+    required: true,
+  },
+  visibility: {
+    type: Object,
     required: true,
   },
 });

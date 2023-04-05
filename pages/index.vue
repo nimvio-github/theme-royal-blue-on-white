@@ -1,22 +1,20 @@
 <template>
-  <NuxtLayout
-    :name="data.Data.layout[0].Data.layoutName"
-    :placeholders="data.Data.layout[0].Data.placeholders"
-  >
-    <template #main>
-      <LazyCommonRefetchButton @click="refresh">
-        {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
-      </LazyCommonRefetchButton>
-      <!-- content for the main slot -->
+  <NuxtLayout :name="data.Data.layoutName ? data.Data.layoutName : 'default'">
+    <template v-for="(contents, key) in data.widgets" #[key]>
       <component-renderer
-        v-if="data.Data.widgetContent"
-        :components="data.Data.widgetContent"
+        :key="key"
+        :components="contents"
       ></component-renderer>
     </template>
+
+    <LazyCommonRefetchButton @click="refresh">
+      {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
+    </LazyCommonRefetchButton>
   </NuxtLayout>
 </template>
 
 <script setup>
+import groupBy from "lodash/groupBy";
 import { getContentByPageSlug } from "~~/utils/dataFetching";
 
 const route = useRoute();
@@ -32,7 +30,9 @@ const { data, refresh, pending } = await useAsyncData(
         deep: true,
       }
     );
-    return response;
+
+    const widgets = groupBy(response.Data.widgetContent, "Data.placeholder");
+    return { ...response, widgets };
   }
 );
 

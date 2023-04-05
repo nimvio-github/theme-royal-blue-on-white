@@ -41,7 +41,7 @@
       <!-- Article Cards -->
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-12 gap-6 justify-center"
-        data-kontent-component-id="dataSource"
+        data-kontent-component-id="datasource"
       >
         <page-article-card
           v-for="component in paginate.contents"
@@ -70,7 +70,7 @@
 import { getChildPages } from "~~/utils/dataFetching";
 
 const props = defineProps({
-  dataSource: {
+  datasource: {
     type: Array,
     required: true,
   },
@@ -83,7 +83,7 @@ const { data } = await useAsyncData(
   `articleList-${route.path}`,
   async ({ $gqlClient }) => {
     let contents = [];
-    const pageComponents = props.dataSource.map(async (source) => {
+    const pageComponents = props.datasource.map(async (source) => {
       const { data: componentData } = await getChildPages(
         $gqlClient,
         source.ContentID

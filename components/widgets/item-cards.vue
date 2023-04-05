@@ -59,8 +59,6 @@
 </template>
 
 <script setup>
-// import { getMultipleContents } from "~~/utils/dataFetching";
-
 const props = defineProps({
   title: {
     type: String,
@@ -73,17 +71,4 @@ const props = defineProps({
 });
 
 const { $img } = useNuxtApp();
-// const route = useRoute();
-
-// // Fetch Contents Data
-// const { data: components } = await useAsyncData(
-//   `itemCards-${route.fullPath}`,
-//   async ({ $gqlClient }) => {
-//     const { data: pageComponents } = await getMultipleContents(
-//       $gqlClient,
-//       props.contents
-//     );
-//     return pageComponents;
-//   }
-// );
 </script>

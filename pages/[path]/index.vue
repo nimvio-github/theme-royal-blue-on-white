@@ -1,29 +1,22 @@
 <template>
-  <NuxtLayout
-    :name="data.Data.layout[0].Data.layoutName"
-    :placeholders="data.Data.layout[0].Data.placeholders"
-  >
-    <template #main>
-      <common-breadcrumb />
-      <LazyCommonRefetchButton @click="refresh">
-        {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
-      </LazyCommonRefetchButton>
-      <!-- content for the main slot -->
+  <NuxtLayout :name="data.Data.layoutName ? data.Data.layoutName : 'default'">
+    <template v-for="(contents, key) in data.widgets" #[key]>
       <component-renderer
-        v-if="data.TemplateName === 'Page Article'"
-        :components="[data]"
-      ></component-renderer>
-      <component-renderer
-        v-else-if="
-          data.TemplateName !== 'Page Article' && data.Data.widgetContent
-        "
-        :components="data.Data.widgetContent"
+        :key="key"
+        :components="contents"
       ></component-renderer>
     </template>
+
+    <LazyCommonRefetchButton @click="refresh">
+      {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
+    </LazyCommonRefetchButton>
   </NuxtLayout>
 </template>
 
 <script setup>
+import groupBy from "lodash/groupBy";
+import clone from "lodash/clone";
+import omit from "lodash/omit";
 import { getContentByPageSlug, getContentById } from "~~/utils/dataFetching";
 
 const route = useRoute();
@@ -41,7 +34,12 @@ const { data, refresh, pending } = await useAsyncData(
           deep: true,
         }
       );
-      return newResponse;
+
+      const { widgetContent } = newResponse.Data;
+      widgetContent.unshift(omit(clone(newResponse), "Data.widgetContent"));
+
+      const widgets = groupBy(widgetContent, "Data.placeholder");
+      return { ...newResponse, widgets };
     }
     const { data: response } = await getContentByPageSlug(
       $gqlClient,
@@ -50,7 +48,15 @@ const { data, refresh, pending } = await useAsyncData(
         deep: true,
       }
     );
-    return response;
+
+    const { widgetContent } = response.Data;
+    widgetContent.unshift(omit(clone(response), "Data.widgetContent"));
+
+    const widgets = groupBy(widgetContent, "Data.placeholder");
+    return {
+      ...response,
+      widgets,
+    };
   }
 );
 
