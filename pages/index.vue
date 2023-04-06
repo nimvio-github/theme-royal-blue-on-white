@@ -74,10 +74,6 @@ onBeforeMount(() => {
     if (newContent) {
       const widgets = groupBy(newContent.Data.widgets, "Data.placeholder");
       const updatedWidgets = { ...newContent, widgets };
-
-      console.log("This is new content", newContent);
-      console.log("This is updatedWidgets", updatedWidgets);
-
       data.value = updatedWidgets;
     }
   });

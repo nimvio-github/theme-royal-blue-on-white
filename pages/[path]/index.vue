@@ -96,7 +96,14 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      data.value = newContent;
+      const widgetContent = newContent.Data.widgets;
+      widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
+
+      const widgets = groupBy(widgetContent, "Data.placeholder");
+      const updatedWidgets = { ...newContent, widgets };
+
+      console.log("This is the updated widgets: ", updatedWidgets);
+      data.value = updatedWidgets;
     }
   });
 });
