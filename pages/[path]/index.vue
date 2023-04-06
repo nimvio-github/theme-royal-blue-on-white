@@ -103,7 +103,6 @@ onBeforeMount(() => {
       widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
 
       const widgets = groupBy(widgetContent, "Data.placeholder");
-      console.log("widgets", widgets);
 
       // remove duplicate values in widgets[placeholder]: Array
       const newWigets = mapValues(widgets, (widget) => {
@@ -113,8 +112,6 @@ onBeforeMount(() => {
 
         return newWidget;
       });
-
-      console.log("newWigets", newWigets);
 
       const updatedWidgets = { ...newContent, widgets: newWigets };
       data.value = updatedWidgets;
