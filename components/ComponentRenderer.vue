@@ -119,7 +119,7 @@ export default {
             contents: componentData.Data.datasource || [],
             sliderOptions: componentData.Data.sliderOptions || "{}",
           };
-        case "Search":
+        case "SearchWidget":
           return {
             ...webLinkProps,
           };
@@ -186,7 +186,7 @@ export default {
           return ArticleList;
         case "SliderBannerWidget":
           return SliderBanner;
-        case "Search":
+        case "SearchWidget":
           return Search;
         case "Widget":
           if (componentData.Data.name === "HeaderPanel") {
