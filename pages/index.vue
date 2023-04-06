@@ -78,7 +78,7 @@ onBeforeMount(() => {
       console.log("This is new content", newContent);
       console.log("This is updatedWidgets", updatedWidgets);
 
-      data.value = newContent;
+      data.value = updatedWidgets;
     }
   });
 });
