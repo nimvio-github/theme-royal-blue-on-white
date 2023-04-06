@@ -58,6 +58,7 @@ export default {
             publishedDate: !componentData.Data.publishDate?.hide
               ? componentData.PublishedAt
               : "",
+            visibility: componentData.Data.visibility,
           };
         case "Article":
           return {
