@@ -97,7 +97,7 @@ onBeforeMount(() => {
     );
     if (newContent) {
       const widgetContent = newContent.Data.widgets;
-      widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
+      widgetContent.unshift(omit(newContent, "Data.widgets"));
 
       const widgets = groupBy(widgetContent, "Data.placeholder");
       const updatedWidgets = { ...newContent, widgets };
