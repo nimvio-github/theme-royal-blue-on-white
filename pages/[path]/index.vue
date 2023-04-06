@@ -102,7 +102,9 @@ onBeforeMount(() => {
       widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
 
       const widgets = groupBy(widgetContent, "Data.placeholder");
-      const updatedWidgets = { ...newContent, widgets: uniq(widgets) };
+      const updatedWidgets = { ...newContent, widgets };
+      console.log("widgets", widgets);
+      console.log("updatedWidgets", updatedWidgets);
 
       data.value = updatedWidgets;
     }
