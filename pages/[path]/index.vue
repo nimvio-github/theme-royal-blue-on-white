@@ -102,7 +102,6 @@ onBeforeMount(() => {
       const widgets = groupBy(widgetContent, "Data.placeholder");
       const updatedWidgets = { ...newContent, widgets };
 
-      console.log("This is the updated widgets: ", updatedWidgets);
       data.value = updatedWidgets;
     }
   });
