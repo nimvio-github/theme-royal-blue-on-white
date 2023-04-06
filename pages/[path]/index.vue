@@ -17,7 +17,8 @@
 import groupBy from "lodash/groupBy";
 import clone from "lodash/clone";
 import omit from "lodash/omit";
-import uniq from "lodash/uniq";
+import uniqBy from "lodash/uniqBy";
+import mapValues from "lodash/mapValues";
 
 import { getContentByPageSlug, getContentById } from "~~/utils/dataFetching";
 
@@ -102,10 +103,20 @@ onBeforeMount(() => {
       widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
 
       const widgets = groupBy(widgetContent, "Data.placeholder");
-      const updatedWidgets = { ...newContent, widgets };
       console.log("widgets", widgets);
-      console.log("updatedWidgets", updatedWidgets);
 
+      // remove duplicate values in widgets[placeholder]: Array
+      const newWigets = mapValues(widgets, (widget) => {
+        const newWidget = uniqBy(widget, function (item) {
+          return item.Name;
+        });
+
+        return newWidget;
+      });
+
+      console.log("newWigets", newWigets);
+
+      const updatedWidgets = { ...newContent, widgets: newWigets };
       data.value = updatedWidgets;
     }
   });
