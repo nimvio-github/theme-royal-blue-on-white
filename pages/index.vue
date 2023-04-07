@@ -14,8 +14,8 @@
 </template>
 
 <script setup>
-import groupBy from "lodash/groupBy";
 import { getContentByPageSlug } from "~~/utils/dataFetching";
+import parseWidgets from "~~/utils/parseWidgets";
 
 const route = useRoute();
 const currentPath = route.path === "/" ? "/home" : route.path;
@@ -31,8 +31,7 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    const widgets = groupBy(response.Data.widgets, "Data.placeholder");
-    return { ...response, widgets };
+    return parseWidgets(response);
   }
 );
 
@@ -72,9 +71,7 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      const widgets = groupBy(newContent.Data.widgets, "Data.placeholder");
-      const updatedWidgets = { ...newContent, widgets };
-      data.value = updatedWidgets;
+      data.value = parseWidgets(newContent);
     }
   });
 });
