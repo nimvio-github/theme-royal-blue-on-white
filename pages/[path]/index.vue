@@ -14,12 +14,6 @@
 </template>
 
 <script setup>
-import groupBy from "lodash/groupBy";
-import clone from "lodash/clone";
-import omit from "lodash/omit";
-import uniqBy from "lodash/uniqBy";
-import mapValues from "lodash/mapValues";
-
 import { getContentByPageSlug, getContentById } from "~~/utils/dataFetching";
 import { addGroupWidgets2Content } from "~~/utils/addWidgets";
 

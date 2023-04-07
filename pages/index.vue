@@ -15,7 +15,7 @@
 
 <script setup>
 import { getContentByPageSlug } from "~~/utils/dataFetching";
-import addWidgets from "~~/utils/addWidgets";
+import { addGroupWidgets2Content } from "~~/utils/addWidgets";
 
 const route = useRoute();
 const currentPath = route.path === "/" ? "/home" : route.path;
@@ -31,7 +31,7 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    return addWidgets(response);
+    return addGroupWidgets2Content(response);
   }
 );
 
@@ -71,7 +71,7 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      data.value = addWidgets(newContent);
+      data.value = addGroupWidgets2Content(newContent);
     }
   });
 });
