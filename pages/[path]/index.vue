@@ -21,6 +21,7 @@ import uniqBy from "lodash/uniqBy";
 import mapValues from "lodash/mapValues";
 
 import { getContentByPageSlug, getContentById } from "~~/utils/dataFetching";
+import { addGroupWidgets2Content } from "~~/utils/addWidgets";
 
 const route = useRoute();
 const currentPath = route.path;
@@ -38,11 +39,7 @@ const { data, refresh, pending } = await useAsyncData(
         }
       );
 
-      const widgetContent = newResponse.Data.widgets;
-      widgetContent.unshift(omit(clone(newResponse), "Data.widgets"));
-
-      const widgets = groupBy(widgetContent, "Data.placeholder");
-      return { ...newResponse, widgets };
+      return addGroupWidgets2Content(newResponse);
     }
     const { data: response } = await getContentByPageSlug(
       $gqlClient,
@@ -52,14 +49,7 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    const widgetContent = response.Data.widgets;
-    widgetContent.unshift(omit(clone(response), "Data.widgets"));
-
-    const widgets = groupBy(widgetContent, "Data.placeholder");
-    return {
-      ...response,
-      widgets,
-    };
+    return addGroupWidgets2Content(response);
   }
 );
 
@@ -99,22 +89,7 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      const widgetContent = newContent.Data.widgets;
-      widgetContent.unshift(omit(clone(newContent), "Data.widgets"));
-
-      const widgets = groupBy(widgetContent, "Data.placeholder");
-
-      // remove duplicate values in widgets[placeholder]: Array
-      const newWigets = mapValues(widgets, (widget) => {
-        const newWidget = uniqBy(widget, function (item) {
-          return item.Name;
-        });
-
-        return newWidget;
-      });
-
-      const updatedWidgets = { ...newContent, widgets: newWigets };
-      data.value = updatedWidgets;
+      data.value = addGroupWidgets2Content(newContent);
     }
   });
 });
