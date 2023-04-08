@@ -23,6 +23,19 @@ const currentPath = route.path === "/" ? "/home" : route.path;
 const { data, refresh, pending } = await useAsyncData(
   route.path,
   async ({ $gqlClient }) => {
+    // If it is inside the iframe (has isNewPage and contentId query), fetch using contentId
+    if (route.query.isNewPage === "true" && route.query.contentId) {
+      const { data: newResponse } = await getContentById(
+        $gqlClient,
+        route.query.contentId,
+        {
+          deep: true,
+        }
+      );
+
+      return addGroupWidgets2Content(newResponse);
+    }
+
     const { data: response } = await getContentByPageSlug(
       $gqlClient,
       currentPath,
