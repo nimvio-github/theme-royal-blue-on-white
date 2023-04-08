@@ -49,7 +49,12 @@ const { data, refresh, pending } = await useAsyncData(
 );
 
 const updateContentById = (content, id, newContent, cache = {}) => {
-  console.log("Cache => Update Content By ID function: ", cache);
+  if (!content) {
+    console.log("Content: ", content);
+    console.log("ID: ", id);
+    console.log("New Content: ", newContent);
+    console.log("Cache: ", cache);
+  }
   if (cache[content?.ContentID]) return null;
   cache[content?.ContentID] = true;
   if (content?.ContentID === id) {
@@ -84,10 +89,6 @@ onBeforeMount(() => {
       formData.id,
       formData.formData
     );
-
-    console.log("Current Data Value: ", data.value);
-    console.log("Form Data: ", formData);
-    console.log("New content", newContent);
 
     if (newContent) {
       data.value = addGroupWidgets2Content(newContent);
