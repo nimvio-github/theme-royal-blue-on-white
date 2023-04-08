@@ -70,6 +70,10 @@ onBeforeMount(() => {
       formData.id,
       formData.formData
     );
+
+    console.log("Current Data Value: ", data.value);
+    console.log("Form Data: ", formData);
+
     if (newContent) {
       data.value = addGroupWidgets2Content(newContent);
     }
