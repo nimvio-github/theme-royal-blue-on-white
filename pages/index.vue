@@ -36,6 +36,7 @@ const { data, refresh, pending } = await useAsyncData(
 );
 
 const updateContentById = (content, id, newContent, cache = {}) => {
+  console.log("Update Content By ID function: ", content);
   if (cache[content.ContentID]) return null;
   cache[content.ContentID] = true;
   if (content.ContentID === id) {
