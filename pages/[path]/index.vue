@@ -15,7 +15,7 @@
 
 <script setup>
 import { getContentByPageSlug, getContentById } from "~~/utils/dataFetching";
-import { addGroupWidgets2Content } from "~~/utils/addWidgets";
+import transformContent from "~~/utils/transformContent";
 
 const route = useRoute();
 const currentPath = route.path;
@@ -33,7 +33,7 @@ const { data, refresh, pending } = await useAsyncData(
         }
       );
 
-      return addGroupWidgets2Content(newResponse);
+      return transformContent(newResponse);
     }
     const { data: response } = await getContentByPageSlug(
       $gqlClient,
@@ -43,7 +43,7 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
-    return addGroupWidgets2Content(response);
+    return transformContent(response);
   }
 );
 
@@ -83,7 +83,7 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      data.value = addGroupWidgets2Content(newContent);
+      data.value = transformContent(newContent);
     }
   });
 });

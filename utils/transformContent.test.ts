@@ -1,8 +1,7 @@
-import {
+import transformContent, {
   groupWidgets,
   appendContent2WidgetsData,
-  addGroupWidgets2Content,
-} from "./addWidgets";
+} from "./transformContent";
 
 const content = {
   Name: "Content",
@@ -147,6 +146,6 @@ describe("test add group widgets to content", () => {
       },
     };
 
-    expect(addGroupWidgets2Content(content)).toStrictEqual(newContent);
+    expect(transformContent(content)).toStrictEqual(newContent);
   });
 });

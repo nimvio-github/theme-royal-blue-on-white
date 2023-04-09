@@ -15,19 +15,6 @@ interface NewContentResponse extends ContentResponse<DataWidgets> {
 }
 
 /**
- * Add widgets to Nimvio content
- * @param raw Nimvio content
- * @returns
- */
-export default function addWidgets(
-  raw: ContentResponse<DataWidgets>
-): NewContentResponse {
-  const widgets = groupBy(raw.Data.widgets, "Data.placeholder");
-
-  return { ...raw, widgets };
-}
-
-/**
  * Group widgets based by Data.placeholder
  * @param widgetsData widgets from content.Data.widgets
  * @returns New widgets object grouped by placeholder
@@ -52,11 +39,13 @@ export function appendContent2WidgetsData(
 }
 
 /**
- * Add group widgets to Nimvio content
+ * Transform the existing Content by adding a group widgets to be rendered by Component Renderer
  * @param content Nimvio content
- * @returns New content object that extends content response
+ * @returns New content response object that extends content response
  */
-export function addGroupWidgets2Content(content: ContentResponse<DataWidgets>) {
+export default function transformContent(
+  content: ContentResponse<DataWidgets>
+): NewContentResponse {
   const widgets = groupWidgets(appendContent2WidgetsData(content));
   return { ...content, widgets };
 }
