@@ -36,6 +36,18 @@ export default {
         "data-nimvio-template-name": componentData.TemplateName,
       };
       switch (componentData.TemplateName) {
+        case "Page New":
+          return {
+            ...webLinkProps,
+            title: componentData.Data.contentTitle,
+            content: componentData.Data.content,
+            sharingChannels: componentData.Data.sharingChannels,
+            category: componentData.Data.category,
+            publishedDate: !componentData.Data.publishDate?.hide
+              ? componentData.PublishedAt
+              : "",
+            visibility: componentData.Data.visibility,
+          };
         case "Page":
           return {
             ...webLinkProps,
@@ -171,6 +183,8 @@ export default {
     getComponentType(componentData) {
       switch (componentData.TemplateName) {
         case "Page Article":
+        case "Page New":
+          return Article;
         case "Page":
           return Article;
         case "Article":

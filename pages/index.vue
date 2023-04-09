@@ -85,6 +85,11 @@ onBeforeMount(() => {
     );
 
     if (newContent) {
+      console.log("New Content", newContent);
+      console.log(
+        "Transformed New Content",
+        addGroupWidgets2Content(newContent)
+      );
       data.value = addGroupWidgets2Content(newContent);
     }
   });
