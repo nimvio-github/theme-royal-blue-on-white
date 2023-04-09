@@ -1,4 +1,6 @@
-import { groupBy, omit, clone } from "lodash";
+import groupBy from "lodash/groupBy";
+import omit from "lodash/omit";
+import clone from "lodash/clone";
 
 type WidgetsData = Array<ContentResponse<any>>;
 type WidgetsGroup = Object;
