@@ -1,12 +1,14 @@
 import groupBy from "lodash/groupBy";
 import omit from "lodash/omit";
 import clone from "lodash/clone";
+import uniq from "lodash/uniq";
 
 type WidgetsData = Array<ContentResponse<any>>;
 type WidgetsGroup = Object;
 
 interface DataWidgets {
   placeholder: string;
+  templates: Array<any>;
   widgets: WidgetsData;
 }
 
@@ -32,10 +34,22 @@ export function groupWidgets(widgetsData: WidgetsData): WidgetsGroup {
 export function appendContent2WidgetsData(
   content: ContentResponse<DataWidgets>
 ): Array<ContentResponse<any>> {
-  const { widgets } = content.Data;
+  const { widgets, templates } = content.Data;
+
+  let widgetsFromTemplates = [];
+  if (templates[0]) {
+    widgetsFromTemplates = templates[0].Data.widgets;
+  }
 
   // cloned content while omitting the Data.widgets then add to the begining of widgets array
-  return [omit(clone(content), "Data.widgets"), ...widgets];
+  // merged all widgets data with widgets that come from templates
+  const allWidgets = [
+    omit(clone(content), "Data.widgets"),
+    ...widgets,
+    ...widgetsFromTemplates,
+  ];
+
+  return uniq(allWidgets);
 }
 
 /**
