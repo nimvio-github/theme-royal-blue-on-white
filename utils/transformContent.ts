@@ -37,7 +37,7 @@ export function appendContent2WidgetsData(
   const { widgets, templates } = content.Data;
 
   let widgetsFromTemplates = [];
-  if (templates[0]) {
+  if (templates && templates[0]) {
     widgetsFromTemplates = templates[0].Data.widgets;
   }
 

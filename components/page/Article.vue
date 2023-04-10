@@ -101,7 +101,7 @@ const props = defineProps({
     required: true,
   },
   visibility: {
-    type: Object,
+    type: [String, Object],
     required: true,
   },
 });
