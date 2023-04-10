@@ -89,7 +89,7 @@ const props = defineProps({
     default: "",
   },
   sharingChannels: {
-    type: Object,
+    type: [String, Object],
     default: () => ({}),
   },
   title: {
