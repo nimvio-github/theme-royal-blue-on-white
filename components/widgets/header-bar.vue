@@ -108,7 +108,7 @@ const { data } = await useAsyncData("headerBar", async ({ $gqlClient }) => {
 
     return {
       text: pageData.navigationTitle || pageData.pageTitle,
-      to: pageData.pageSlug,
+      to: pageData.urlPath,
       navigationTitle: pageData.navigationTitle,
       children: [],
       isShow: pageData.navigation.showInMenu,
