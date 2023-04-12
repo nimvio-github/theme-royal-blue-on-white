@@ -12,7 +12,7 @@
     </LazyCommonRefetchButton>
   </NuxtLayout>
 
-  <CommonEmpty v-if="!data" />
+  <CommonEmpty v-if="!data.Data.layoutName && !data.Data.placeholder" />
 </template>
 
 <script setup>
