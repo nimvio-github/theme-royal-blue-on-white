@@ -97,7 +97,7 @@ onBeforeMount(() => {
     const newContent = updateContentById(
       data.value,
       formData.id,
-      formData.formData
+      formData.data
     );
 
     if (newContent) {
