@@ -87,7 +87,11 @@ onBeforeMount(() => {
     );
 
     if (newContent) {
+      console.log("New Content", newContent);
+
       data.value = transformContent(newContent);
+
+      console.log("New DATA", data.value);
     }
   });
 });
