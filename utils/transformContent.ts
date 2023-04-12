@@ -50,7 +50,7 @@ export function appendContent2WidgetsData(
   // cloned content while omitting the Data.widgets then add to the begining of widgets array
   // merged all widgets data with widgets that come from templates
   const allWidgets = [
-    omit(clone(content), "Data.widgets"),
+    omit(omit(clone(content), "Data.widgets"), "Data.templates"),
     ...widgets,
     ...widgetsFromTemplates,
   ];
