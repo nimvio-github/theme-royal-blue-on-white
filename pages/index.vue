@@ -30,6 +30,7 @@
 </template>
 
 <script setup>
+import { clone } from "lodash";
 import { getContentByPageSlug } from "~~/utils/dataFetching";
 import transformContent from "~~/utils/transformContent";
 
@@ -96,9 +97,10 @@ onBeforeMount(() => {
   $nimvioSdk.livePreviewUtils.onPreviewContentChange((content) => {
     const newContent = updateContentById(
       data.value,
-      content.formData.id,
+      content.id,
       content.formData
     );
+    console.log("Data", clone(data));
 
     console.log("Content change", content);
 
