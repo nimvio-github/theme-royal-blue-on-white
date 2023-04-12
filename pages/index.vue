@@ -1,6 +1,6 @@
 <template>
-  <NuxtLayout v-if="data" :name="data ? data.Data.layoutName : 'default'">
-    <template v-for="(contents, key) in data.widgets" #[key]>
+  <NuxtLayout :name="data ? data.Data.layoutName : 'default'">
+    <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
         :key="key"
         :components="contents"
