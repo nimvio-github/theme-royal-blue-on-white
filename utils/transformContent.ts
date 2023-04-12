@@ -34,8 +34,14 @@ export function groupWidgets(widgetsData: WidgetsData): WidgetsGroup {
 export function appendContent2WidgetsData(
   content: ContentResponse<DataWidgets>
 ): Array<ContentResponse<any>> {
-  const { widgets, templates } = content.Data;
+  let { widgets } = content.Data;
+  // Handle empty widgets content on initial page creation
+  if (!Array.isArray(widgets)) {
+    widgets = [];
+  }
 
+  // Only push widgets if templates is not empty
+  const { templates } = content.Data;
   let widgetsFromTemplates = [];
   if (templates && templates[0]) {
     widgetsFromTemplates = templates[0].Data.widgets;
