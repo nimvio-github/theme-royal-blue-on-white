@@ -93,11 +93,11 @@ const updateContentById = (content, id, newContent, cache = {}) => {
 
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
-  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((content) => {
     const newContent = updateContentById(
       data.value,
-      formData.id,
-      formData.data
+      content.formData.id,
+      content.formData
     );
 
     if (newContent) {
