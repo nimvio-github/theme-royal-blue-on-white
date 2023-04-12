@@ -11,6 +11,8 @@
       {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
     </LazyCommonRefetchButton>
   </NuxtLayout>
+
+  <CommonEmpty v-if="!data" />
 </template>
 
 <script setup>

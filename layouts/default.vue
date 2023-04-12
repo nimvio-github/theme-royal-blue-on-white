@@ -9,6 +9,7 @@
     </header>
 
     <slot name="main"> </slot>
+    <slot name="empty"></slot>
 
     <footer
       class="bg-dark-gray text-dark-white mt-12 md:mt-24 footer-bg-custom"
