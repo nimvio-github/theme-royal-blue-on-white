@@ -100,6 +100,8 @@ onBeforeMount(() => {
       content.formData
     );
 
+    console.log("Content change", content);
+
     if (newContent) {
       console.log("New Content", newContent);
 
