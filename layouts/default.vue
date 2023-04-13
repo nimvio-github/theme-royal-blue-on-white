@@ -9,13 +9,22 @@
     </header>
 
     <slot name="main"> </slot>
-    <slot name="empty"></slot>
 
     <footer
       class="bg-dark-gray text-dark-white mt-12 md:mt-24 footer-bg-custom"
     >
       <slot name="footer"> </slot>
     </footer>
+
+    <CommonEmpty
+      v-if="
+        !data &&
+        !data?.Data &&
+        !data?.Data.layoutName &&
+        !data?.Data.placeholder &&
+        !data?.Data.contentTitle
+      "
+    />
   </div>
 </template>
 
@@ -23,6 +32,13 @@
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk ? `${titleChunk}` : "Nimvio Website";
+  },
+});
+
+defineProps({
+  data: {
+    type: Object,
+    required: true,
   },
 });
 </script>
