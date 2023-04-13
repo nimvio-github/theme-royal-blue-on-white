@@ -18,8 +18,6 @@
 
     <CommonEmpty
       v-if="
-        !data &&
-        !data?.Data &&
         !data?.Data.layoutName &&
         !data?.Data.placeholder &&
         !data?.Data.contentTitle
