@@ -6,7 +6,8 @@
       <br />
       <br />
 
-      Start by choosing a Layout for your new page 👉.
+      Start by choosing a <span class="font-extrabold">Layout</span> for your
+      new page 👉📱.
     </p>
   </section>
 
@@ -15,8 +16,22 @@
     class="flex items-center justify-center h-screen"
   >
     <p class="prose text-2xl tracking-tight">
-      Now continue with the Placeholder, it is the location where you want your
-      content to appear on your page 📑.
+      Now continue with the <span class="font-extrabold">Placeholder</span>, it
+      is the location where you want your content to appear on your page 📑.
+
+      <br />
+      <br />
+
+      It can be a <span class="font-extrabold">Header</span>🧑🏻
+
+      <br />
+      <br />
+
+      a <span class="font-extrabold">Body</span>👨🏻‍💼
+      <br />
+      <br />
+
+      or a <span class="font-extrabold">Footer</span>🦶🏻
     </p>
   </section>
 
@@ -27,11 +42,21 @@
     class="flex items-center justify-center h-screen"
   >
     <p class="prose text-2xl tracking-tight">
-      Great Job 👍, your new page now already have a Layout and a Placeholder in
-      place. The next step is to give your content a Title📝.
+      Great Job 👍, your new page now already have a
+      <span class="font-extrabold">Layout</span> and a
+      <span class="font-extrabold">Placeholder</span> in place. The next step is
+      to give your content a <span class="font-extrabold">Title</span>.
 
       <br />
       <br />
+
+      Go ahead, try to type in the
+      <span class="font-extrabold">Content Title</span> field 📝. You should see
+      it appear on the preview.
+
+      <br />
+      <br />
+
       After you finish with your Draft, don't forget to
       <span class="font-extrabold">Save</span> your content to prevent loosing
       your work 👌.
