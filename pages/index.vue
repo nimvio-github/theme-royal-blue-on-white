@@ -12,7 +12,7 @@
     </LazyCommonRefetchButton>
 
     <template #empty>
-      <CommonEmpty v-if="showEmpty" />
+      <CommonEmpty v-if="showEmpty" :data="data" />
     </template>
   </NuxtLayout>
 </template>
