@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout :name="data ? data.Data.layoutName : 'default'">
+  <NuxtLayout :name="data.Data.layoutName ? data.Data.layoutName : 'default'">
     <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
         :key="key"
@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import { clone } from "lodash";
 import { getContentByPageSlug } from "~~/utils/dataFetching";
 import transformContent from "~~/utils/transformContent";
 
@@ -65,13 +64,23 @@ const { data, refresh, pending } = await useAsyncData(
   }
 );
 
+// content: NewContentResponse = Data.value
+// id: content.id
+// newContent: formData
+//
 const updateContentById = (content, id, newContent, cache = {}) => {
   if (cache[content?.ContentID]) return null;
   cache[content?.ContentID] = true;
+
+  // cache {
+  // xxxx: true
+  // }
+
   if (content?.ContentID === id) {
     content.Data = newContent;
     return content;
   }
+
   const componentDataKeys = Object.keys(content.Data);
   for (let i = 0; i < componentDataKeys.length; i++) {
     const componentDataKey = componentDataKeys[i];
@@ -95,6 +104,14 @@ const updateContentById = (content, id, newContent, cache = {}) => {
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
   $nimvioSdk.livePreviewUtils.onPreviewContentChange((content) => {
+    // ContentChangeReceivedPayloadData
+    // id
+    // formData<any>
+    // example:
+    // formData {
+    //  ...formFields
+    // }
+
     const newContent = updateContentById(
       data.value,
       content.id,
@@ -103,7 +120,6 @@ onBeforeMount(() => {
     console.log("Data", clone(data));
 
     console.log("Content change", content);
-
     if (newContent) {
       console.log("New Content", newContent);
 
