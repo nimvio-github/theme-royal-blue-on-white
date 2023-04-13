@@ -11,7 +11,7 @@
       {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
     </LazyCommonRefetchButton>
 
-    <template v-if="!data.Data.layoutName && !data.Data.placeholder" #empty>
+    <template #empty>
       <section class="flex items-center justify-center h-screen">
         <p class="prose text-2xl tracking-tight">
           It looks like you are trying to create a new page? Don't worry your
@@ -82,8 +82,13 @@ const updateContentById = (content, id, newContent, cache = {}) => {
   }
 
   const componentDataKeys = Object.keys(content.Data);
+
+  // componentDataKeys = ["layoutName", "placeholder"]
+
   for (let i = 0; i < componentDataKeys.length; i++) {
     const componentDataKey = componentDataKeys[i];
+
+    // Check if it is linked content
     if (Array.isArray(content.Data[componentDataKey])) {
       for (let j = 0; j < content.Data[componentDataKey].length; j++) {
         const found = updateContentById(
