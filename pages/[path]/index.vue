@@ -1,6 +1,6 @@
 <template>
-  <NuxtLayout v-if="data" :name="data ? data.Data.layoutName : 'default'">
-    <template v-for="(contents, key) in data.widgets" #[key]>
+  <NuxtLayout :name="data.Data.layoutName ? data.Data.layoutName : 'default'">
+    <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
         :key="key"
         :components="contents"
@@ -10,9 +10,11 @@
     <LazyCommonRefetchButton @click="refresh">
       {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
     </LazyCommonRefetchButton>
-  </NuxtLayout>
 
-  <CommonEmpty v-if="!data" />
+    <template #empty>
+      <CommonEmpty v-if="showEmpty" />
+    </template>
+  </NuxtLayout>
 </template>
 
 <script setup>
@@ -48,6 +50,11 @@ const { data, refresh, pending } = await useAsyncData(
     return transformContent(response);
   }
 );
+
+const showEmpty = computed(() => {
+  const { Data } = data.value;
+  return !Data.layoutName && !Data.placeholder && !Data.contentTitle;
+});
 
 const updateContentById = (content, id, newContent, cache = {}) => {
   if (cache[content.ContentID]) return null;
