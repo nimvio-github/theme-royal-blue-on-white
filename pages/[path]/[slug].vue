@@ -73,16 +73,20 @@ const updateContentById = (content, id, newContent, cache = {}) => {
 
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
-  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((content) => {
     const newContent = updateContentById(
       data.value,
-      formData.id,
-      formData.formData
+      content.id,
+      content.formData
     );
     if (newContent) {
       data.value = transformContent(newContent);
     }
   });
+});
+
+onUnmounted(() => {
+  $nimvioSdk.destroy();
 });
 
 useHead({

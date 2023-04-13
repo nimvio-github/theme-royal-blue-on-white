@@ -57,17 +57,9 @@ const showEmpty = computed(() => {
   return !Data.layoutName && !Data.placeholder && !Data.contentTitle;
 });
 
-// content: NewContentResponse = Data.value
-// id: content.id
-// newContent: formData
-//
 const updateContentById = (content, id, newContent, cache = {}) => {
   if (cache[content?.ContentID]) return null;
   cache[content?.ContentID] = true;
-
-  // cache {
-  // xxxx: true
-  // }
 
   if (content?.ContentID === id) {
     content.Data = newContent;
@@ -75,8 +67,6 @@ const updateContentById = (content, id, newContent, cache = {}) => {
   }
 
   const componentDataKeys = Object.keys(content.Data);
-
-  // componentDataKeys = ["layoutName", "placeholder"]
 
   for (let i = 0; i < componentDataKeys.length; i++) {
     const componentDataKey = componentDataKeys[i];
@@ -101,25 +91,21 @@ const updateContentById = (content, id, newContent, cache = {}) => {
 
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
-  $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
-    // ContentChangeReceivedPayloadData
-    // id
-    // formData<any>
-    // example:
-    // formData {
-    //  ...formFields
-    // }
-
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange((content) => {
     const newContent = updateContentById(
       data.value,
-      formData.id,
-      formData.formData
+      content.id,
+      content.formData
     );
 
     if (newContent) {
       data.value = transformContent(newContent);
     }
   });
+});
+
+onUnmounted(() => {
+  $nimvioSdk.destroy();
 });
 
 useHead({
