@@ -104,10 +104,6 @@ onBeforeMount(() => {
   });
 });
 
-onUnmounted(() => {
-  $nimvioSdk.destroy();
-});
-
 useHead({
   title: data.value?.Data.pageTitle,
 });
