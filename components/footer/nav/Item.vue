@@ -1,16 +1,12 @@
 <template>
-  <div class="flex flex-col gap-4">
-    <NuxtLink
-      :to="`${to}`"
-      class="font-bold text-dark-white hover:text-light-white"
-      >{{ text }}</NuxtLink
-    >
+  <div class="footer-bar__nav">
+    <NuxtLink :to="`/${to}`">{{ text }}</NuxtLink>
+
     <NuxtLink
       v-for="item in navChilds"
       :key="item.text"
       :data-nimvio-content-id="item.ContentID"
       :data-nimvio-template-name="item.TemplateName"
-      class="text-dark-white hover:text-light-white hidden md:block"
       :to="`/${item.to}`"
       >{{ item.text }}
     </NuxtLink>
@@ -18,6 +14,15 @@
 </template>
 
 <script lang="ts">
+import { PropType } from "vue";
+
+interface NavItem {
+  text: string;
+  ContentID: string;
+  TemplateName: string;
+  to: string;
+}
+
 export default {
   props: {
     text: {
@@ -29,9 +34,21 @@ export default {
       required: true,
     },
     navChilds: {
-      type: Array,
+      type: Array as PropType<Array<NavItem>>,
       default: null,
     },
   },
 };
 </script>
+
+<style lang="scss">
+.footer-bar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  a {
+    font-weight: 700;
+  }
+}
+</style>

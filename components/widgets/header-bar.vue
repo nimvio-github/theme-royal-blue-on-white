@@ -31,31 +31,28 @@
           />
         </template>
       </div>
-      <div class="flex flex-grow"></div>
+      <div class="navbar__menu-separator"></div>
+
       <header-nav-search
-        class="hidden lg:flex"
         href="javascript:void(0)"
         @click="state.searchOpen = !state.searchOpen"
       />
-      <div class="lg:hidden block">
-        <header-nav-hamburger
-          :class="state.open && 'open'"
-          @click="state.open = !state.open"
-        />
-      </div>
+      <header-nav-hamburger
+        :class="state.open && 'open'"
+        @click="state.open = !state.open"
+      />
     </nav>
 
-    <div v-if="state.searchOpen" class="container hidden lg:block py-4 w-full">
-      <header-nav-search-input />
-    </div>
+    <header-nav-search-input
+      v-if="state.searchOpen"
+      class="navbar__search--desktop"
+    />
 
     <!-- Mobile -->
-    <nav v-if="state.open" class="w-full block lg:hidden bg-white">
-      <div class="container block lg:hidden py-4 w-full">
-        <header-nav-search-input />
-      </div>
+    <nav v-if="state.open" class="navbar__wrapper--mobile">
+      <header-nav-search-input />
       <hr />
-      <div class="container mx-auto py-8 flex flex-col gap-4">
+      <div class="container navbar__links--mobile">
         <template v-for="item in data.items">
           <header-nav-item
             v-if="item && item.isShow"
@@ -185,5 +182,25 @@ const state = reactive({
   .navbar__links {
     display: flex;
   }
+}
+
+.navbar__wrapper--mobile {
+  display: block;
+  width: 100%;
+  background-color: $nimvio-white;
+}
+
+@media (min-width: 1024px) {
+  .navbar__wrapper--mobile {
+    display: none;
+  }
+}
+
+.navbar__links--mobile {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 </style>

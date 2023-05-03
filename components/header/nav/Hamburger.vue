@@ -1,13 +1,13 @@
 <template>
-  <div class="hamburger">
+  <div class="navbar__hamburger">
     <span></span>
     <span></span>
     <span></span>
   </div>
 </template>
 
-<style scoped>
-.hamburger {
+<style>
+.navbar__hamburger {
   cursor: pointer;
   display: block;
   height: 3rem;
@@ -16,7 +16,7 @@
   margin-left: auto;
 }
 
-.hamburger span {
+.navbar__hamburger span {
   background-color: currentColor;
   display: block;
   height: 1px;
@@ -31,7 +31,7 @@
   font-weight: inherit;
 }
 
-.hamburger span:nth-child(1) {
+.navbar__hamburger span:nth-child(1) {
   top: calc(50% - 5px);
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
@@ -39,7 +39,7 @@
   transform-origin: left center;
 }
 
-.hamburger span:nth-child(2) {
+.navbar__hamburger span:nth-child(2) {
   top: calc(50% - 0px);
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
@@ -47,7 +47,7 @@
   transform-origin: left center;
 }
 
-.hamburger span:nth-child(3) {
+.navbar__hamburger span:nth-child(3) {
   top: calc(50% + 6px);
   -webkit-transform-origin: left center;
   -moz-transform-origin: left center;
@@ -55,15 +55,21 @@
   transform-origin: left center;
 }
 
-.hamburger.open span:nth-child(1) {
+.navbar__hamburger.open span:nth-child(1) {
   transform: rotate(45deg);
 }
 
-.hamburger.open span:nth-child(2) {
+.navbar__hamburger.open span:nth-child(2) {
   opacity: 0;
 }
 
-.hamburger.open span:nth-child(3) {
+.navbar__hamburger.open span:nth-child(3) {
   transform: rotate(-45deg);
+}
+
+@media (min-width: 1024px) {
+  .navbar__hamburger {
+    display: none;
+  }
 }
 </style>

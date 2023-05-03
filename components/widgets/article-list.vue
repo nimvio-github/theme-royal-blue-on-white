@@ -1,68 +1,66 @@
 <!-- eslint-disable vue/no-v-model-argument -->
 <template>
-  <section class="py-6">
-    <div class="container mx-auto">
-      <!-- Filters -->
-      <div class="flex items-center md:flex-row flex-col gap-2">
-        <div class="flex gap-8 items-center overflow-x-auto max-w-full py-2">
-          <nuxt-link
-            class="cursor-pointer uppercase text-lg hover:text-royal-blue font-bold text-dark-gray"
-            :class="state.selectedCategory === 'All' && 'text-royal-blue'"
-            @click="state.selectedCategory = 'All'"
-            >All</nuxt-link
-          >
-          <nuxt-link
-            v-for="category in allCategories"
-            :key="category"
-            class="cursor-pointer uppercase text-lg hover:text-royal-blue font-bold text-dark-gray"
-            :class="state.selectedCategory === category && 'text-royal-blue'"
-            @click="state.selectedCategory = category"
-            >{{ category }}</nuxt-link
-          >
-        </div>
-        <div class="flex-grow"></div>
-        <div class="relative md:w-auto w-full">
-          <label
-            class="absolute right-2 top-2 pointer-events-none"
-            for="period"
-          >
-            <icon name="mdi-chevron-down" size="2rem" />
-          </label>
-          <select
-            id="period"
-            v-model="state.selectedSort"
-            class="block md:w-64 w-full p-2 border text-lg border-gray-300 appearance-none"
-          >
-            <option value="Latest">Latest</option>
-            <option value="Oldest">Oldest</option>
-          </select>
-        </div>
-      </div>
-      <!-- Article Cards -->
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 py-12 gap-6 justify-center"
-        data-kontent-component-id="datasource"
-      >
-        <page-article-card
-          v-for="component in paginate.contents"
-          :key="component.ContentID"
-          :data-nimvio-template-name="component.TemplateName"
-          :data-nimvio-content-id="component.ContentID"
-          :to="`${route.path}/${component.Data.pageSlug}`"
-          :category="component.Data.category"
-          :title="component.Data.pageTitle"
-          :published-at="component.PublishedAt"
-          class="mx-auto"
+  <section class="homepage__section container">
+    <!-- Filters -->
+    <div class="article__listing__filters">
+      <div class="article__listing__categories__filter">
+        <nuxt-link
+          class="article__listing__category"
+          :class="
+            state.selectedCategory === 'All' &&
+            'article__listing__category--selected'
+          "
+          @click="state.selectedCategory = 'All'"
+          >All</nuxt-link
         >
-        </page-article-card>
+        <nuxt-link
+          v-for="category in allCategories"
+          :key="category"
+          class="article__listing__category"
+          :class="
+            state.selectedCategory === category &&
+            'article__listing__category--selected'
+          "
+          @click="state.selectedCategory = category"
+          >{{ category }}</nuxt-link
+        >
       </div>
-      <!-- Pagination -->
-      <common-pagination
-        v-model:page="state.page"
-        :page-size="state.pageSize"
-        :total-pages="paginate.totalPages"
-      />
+      <div class="article__listing__filter__separator"></div>
+      <div class="article__listing__dropdown__filter">
+        <label class="article__listing__dropdown__label" for="period">
+          <icon name="mdi-chevron-down" size="2rem" />
+        </label>
+        <select
+          id="period"
+          v-model="state.selectedSort"
+          class="article__listing__dropdown__select"
+        >
+          <option value="Latest">Latest</option>
+          <option value="Oldest">Oldest</option>
+        </select>
+      </div>
     </div>
+
+    <!-- Article Cards -->
+    <div class="article__grid" data-kontent-component-id="datasource">
+      <page-article-card
+        v-for="component in paginate.contents"
+        :key="component.ContentID"
+        :data-nimvio-template-name="component.TemplateName"
+        :data-nimvio-content-id="component.ContentID"
+        :to="`${route.path}/${component.Data.pageSlug}`"
+        :category="component.Data.category"
+        :title="component.Data.pageTitle"
+        :published-at="component.PublishedAt"
+      >
+      </page-article-card>
+    </div>
+    <!-- Pagination -->
+    <common-pagination
+      v-model:page="state.page"
+      :page-size="state.pageSize"
+      :total-pages="paginate.totalPages"
+    />
   </section>
 </template>
 
@@ -180,3 +178,106 @@ watch(
   }
 );
 </script>
+
+<style lang="scss">
+.article__listing__filters {
+  gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.article__listing__categories__filter {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  overflow-x: auto;
+  gap: 2rem;
+  align-items: center;
+  max-width: 100%;
+  display: flex;
+}
+
+.article__listing__category {
+  color: $nimvio-black;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  cursor: pointer;
+
+  &:hover {
+    color: $nimvio-blue;
+  }
+}
+
+.article__listing__category--selected {
+  color: $nimvio-blue;
+}
+
+.article__listing__filter__separator {
+  flex-grow: 1;
+}
+
+.article__listing__dropdown__filter {
+  position: relative;
+  width: 100%;
+}
+
+.article__listing__dropdown__label {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  pointer-events: none;
+}
+
+.article__listing__dropdown__select {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  padding: 0.5rem;
+  border: 1px solid $nimvio-gray;
+  width: 100%;
+  display: block;
+  appearance: none;
+}
+
+.article__grid {
+  display: grid;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  gap: 1.5rem;
+  justify-content: center;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+  .article__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .article__listing__filters {
+    flex-direction: row;
+  }
+
+  .article__listing__dropdown__filter {
+    width: auto;
+  }
+
+  .article__listing__dropdown__select {
+    width: 16rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .article__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .article__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+</style>

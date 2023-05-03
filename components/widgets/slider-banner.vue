@@ -1,9 +1,7 @@
 <template>
   <Splide :data-splide="sliderOptions" aria-labelledby="basic-example-heading">
     <SplideSlide v-for="component in props.contents" :key="component.ContentID">
-      <WidgetsHeroBanner
-        v-bind="getComponentProps(component)"
-      ></WidgetsHeroBanner>
+      <PageHero v-bind="getComponentProps(component)"></PageHero>
     </SplideSlide>
   </Splide>
 </template>

@@ -1,5 +1,14 @@
 <template>
-  <NuxtLink class="text-royal-blue hover:text-dark-blue">
+  <NuxtLink class="text-link">
     <slot></slot>
   </NuxtLink>
 </template>
+
+<style lang="scss">
+.text-link {
+  color: $nimvio-blue;
+  &:hover {
+    color: $nimvio-dark-blue;
+  }
+}
+</style>

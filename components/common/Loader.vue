@@ -1,19 +1,29 @@
 <template>
-  <div class="lds-default bg-transparent">
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
-    <div class="bg-royal-blue"></div>
+  <div class="lds-default loader">
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
+    <div class="loader-item"></div>
   </div>
 </template>
+
+<style lang="scss">
+.loader {
+  background: transparent;
+}
+
+.loader-item {
+  background-color: $nimvio-blue;
+}
+</style>
 
 <style scoped>
 .lds-default {

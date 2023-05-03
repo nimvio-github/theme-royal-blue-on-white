@@ -10,7 +10,7 @@
     </ul>
 
     <!-- Mobile Subnav-->
-    <ul class="navbar__subnav__link-mobile">
+    <ul class="navbar__subnav__link--mobile">
       <header-nav-sub-item :nav-childs="navChilds" />
     </ul>
   </div>

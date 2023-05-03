@@ -114,3 +114,31 @@ export default {
   name: "Home",
 };
 </script>
+
+<style lang="scss">
+.homepage__section {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.section__title {
+  color: $nimvio-blue;
+  letter-spacing: -0.024em;
+  font-weight: 700;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.section__listing {
+  padding: 1.5rem;
+  column-gap: 1rem;
+  row-gap: 3rem;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  display: flex;
+  margin-top: 3rem;
+}
+</style>
