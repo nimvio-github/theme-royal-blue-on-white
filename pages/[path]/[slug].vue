@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout :name="data ? data.Data.layoutName : 'default'">
-    <template v-for="(contents, key) in data.widgets" #[key]>
+    <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
         :key="key"
         :components="contents"
@@ -12,7 +12,7 @@
     </LazyCommonRefetchButton>
 
     <template #empty>
-      <CommonEmpty :show-empty="showEmpty" :data="data" />
+      <CommonEmpty v-if="data" :show-empty="showEmpty" :data="data" />
     </template>
   </NuxtLayout>
 </template>
