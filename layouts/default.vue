@@ -12,9 +12,7 @@
 
     <slot name="main"> </slot>
 
-    <footer
-      class="bg-dark-gray text-dark-white mt-12 md:mt-24 footer-bg-custom"
-    >
+    <footer class="footer">
       <slot name="footer"> </slot>
     </footer>
   </div>
@@ -33,3 +31,17 @@ export default {
   name: "Default",
 };
 </script>
+
+<style lang="scss">
+@media (min-width: 768px) {
+  .footer {
+    margin-top: 6rem;
+  }
+}
+
+.footer {
+  margin-top: 3rem;
+  color: $nimvio-white;
+  background-color: $nimvio-black;
+}
+</style>
