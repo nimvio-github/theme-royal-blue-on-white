@@ -107,20 +107,11 @@ export default {
             title: Data.title,
             contents: Data.datasource || [],
           };
-        case "ArticleListWidget":
-          return {
-            ...webLinkProps,
-            datasource: Data.datasource || [],
-          };
         case "SliderBannerWidget":
           return {
             ...webLinkProps,
             contents: Data.datasource || [],
             sliderOptions: Data.sliderOptions || "{}",
-          };
-        case "SearchWidget":
-          return {
-            ...webLinkProps,
           };
         case "Widget":
           if (Data.name === "HeaderPanel") {
@@ -160,6 +151,15 @@ export default {
               policyContents: widgetContent.Data.policyContents,
               copyrightName: widgetContent.Data.copyrightName,
             };
+          } else if (Data.name === "ArticleList") {
+            return {
+              ...webLinkProps,
+              datasource: Data.datasource || [],
+            };
+          } else if (Data.name === "Search") {
+            return {
+              ...webLinkProps,
+            };
           }
           break;
         default:
@@ -183,12 +183,8 @@ export default {
           return ItemBanner;
         case "ItemCardsWidget":
           return ItemCards;
-        case "ArticleListWidget":
-          return ArticleList;
         case "SliderBannerWidget":
           return SliderBanner;
-        case "SearchWidget":
-          return Search;
         case "Widget":
           if (Data.name === "HeaderPanel") {
             return HeaderPanel;
@@ -200,6 +196,10 @@ export default {
             return FooterBar;
           } else if (Data.name === "FooterPanel") {
             return FooterPanel;
+          } else if (Data.name === "ArticleList") {
+            return ArticleList;
+          } else if (Data.name === "Search") {
+            return Search;
           }
           break;
         default:
