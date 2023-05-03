@@ -1,5 +1,5 @@
 <template>
-  <section class="navbar" v-bind="webLinkProps">
+  <section class="navbar">
     <nav class="container navbar__wrapper">
       <div>
         <NuxtLink v-if="props.logo" to="/">
@@ -71,13 +71,6 @@
 
 <script setup>
 import { getChildPages } from "~~/utils/dataFetching";
-
-const { public: config } = useRuntimeConfig();
-
-const webLinkProps = {
-  "data-nimvio-content-id": config.header.navContentId,
-  "data-nimvio-template-name": "Header Nav",
-};
 
 const props = defineProps({
   navigationItemsId: {

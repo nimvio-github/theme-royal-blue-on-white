@@ -13,14 +13,6 @@ export default defineNuxtConfig({
       projectId: "",
       pageContentId: "",
       styleContentId: "",
-      header: {
-        navContentId: "",
-        panelContentId: "",
-      },
-      footer: {
-        navContentId: "",
-        panelContentId: "",
-      },
     },
   },
   css: ["~/assets/styles/base.css", "@splidejs/vue-splide/css"],

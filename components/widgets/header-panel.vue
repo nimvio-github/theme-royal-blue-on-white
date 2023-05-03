@@ -1,5 +1,5 @@
 <template>
-  <section class="masthead" v-bind="webLinkProps">
+  <section class="masthead">
     <div class="container masthead__logo">
       <nuxt-img
         :src="props.logo"
@@ -13,8 +13,6 @@
 </template>
 
 <script setup>
-const { public: config } = useRuntimeConfig();
-
 const props = defineProps({
   logo: {
     type: String,
@@ -29,11 +27,6 @@ const props = defineProps({
     default: "",
   },
 });
-
-const webLinkProps = {
-  "data-nimvio-content-id": config.header.panelContentId,
-  "data-nimvio-template-name": "Header Panel",
-};
 </script>
 
 <style lang="scss">
