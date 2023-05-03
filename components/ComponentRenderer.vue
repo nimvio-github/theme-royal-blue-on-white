@@ -30,111 +30,109 @@ export default {
     },
   },
   methods: {
-    getComponentProps(componentData) {
+    getComponentProps(component) {
+      const { Data, TemplateName, ContentID, PublishedAt } = component;
+
       const webLinkProps = {
-        "data-nimvio-content-id": componentData.ContentID,
-        "data-nimvio-template-name": componentData.TemplateName,
+        "data-nimvio-content-id": ContentID,
+        "data-nimvio-template-name": TemplateName,
       };
-      switch (componentData.TemplateName) {
+      switch (TemplateName) {
         case "Page":
           return {
             ...webLinkProps,
-            title: componentData.Data.contentTitle,
-            content: componentData.Data.content,
-            sharingChannels: componentData.Data.sharingChannels,
-            category: componentData.Data.category,
-            publishedDate: !componentData.Data.publishDate?.hide
-              ? componentData.PublishedAt
-              : "",
-            visibility: componentData.Data.visibility,
+            title: Data.contentTitle,
+            content: Data.content,
+            sharingChannels: Data.sharingChannels,
+            category: Data.category,
+            publishedDate: !Data.publishDate?.hide ? PublishedAt : "",
+            visibility: Data.visibility,
           };
         case "Page Article":
           return {
             ...webLinkProps,
-            title: componentData.Data.contentTitle,
-            content: componentData.Data.content,
-            sharingChannels: componentData.Data.sharingChannels,
-            category: componentData.Data.category,
-            publishedDate: !componentData.Data.publishDate?.hide
-              ? componentData.PublishedAt
-              : "",
-            visibility: componentData.Data.visibility,
+            title: Data.contentTitle,
+            content: Data.content,
+            sharingChannels: Data.sharingChannels,
+            category: Data.category,
+            publishedDate: !Data.publishDate?.hide ? component.PublishedAt : "",
+            visibility: Data.visibility,
           };
         case "Article":
           return {
             ...webLinkProps,
-            title: componentData.Data.title,
-            content: componentData.Data.content,
-            sharingChannels: componentData.Data.sharingChannels,
-            category: componentData.Data.category,
-            visibility: componentData.Data.visibility,
+            title: Data.title,
+            content: Data.content,
+            sharingChannels: Data.sharingChannels,
+            category: Data.category,
+            visibility: Data.visibility,
           };
         case "ArticleCardsWidget":
           return {
             ...webLinkProps,
-            title: componentData.Data.title ? componentData.Data.title : "",
-            link: componentData.Data.link,
-            contents: componentData.Data.articles || [],
+            title: Data.title ? Data.title : "",
+            link: Data.link,
+            contents: Data.articles || [],
           };
         case "HeroBannerWidget":
           return {
             ...webLinkProps,
-            title: componentData.Data.title,
-            description: componentData.Data.description,
+            title: Data.title,
+            description: Data.description,
             button: {
-              text: componentData.Data.buttonText,
-              to: componentData.Data.buttonUrl,
+              text: Data.buttonText,
+              to: Data.buttonUrl,
             },
-            backgroundMedia: componentData.Data.backgroundMedia?.MediaUrl,
+            backgroundMedia: Data.backgroundMedia?.MediaUrl,
           };
         case "ItemBannerWidget":
           return {
             ...webLinkProps,
-            tag: componentData.Data.tag,
-            title: componentData.Data.title,
-            description: componentData.Data.description,
+            tag: Data.tag,
+            title: Data.title,
+            description: Data.description,
             link: {
-              text: componentData.Data.linkText,
-              url: componentData.Data.linkUrl,
+              text: Data.linkText,
+              url: Data.linkUrl,
             },
             media: {
-              url: componentData.Data.media?.MediaUrl,
-              alt: componentData.Data.media?.AltText,
+              url: Data.media?.MediaUrl,
+              alt: Data.media?.AltText,
             },
-            reversed: componentData.Data.type === "right",
+            reversed: Data.type === "right",
           };
         case "ItemCardsWidget":
           return {
             ...webLinkProps,
-            title: componentData.Data.title,
-            contents: componentData.Data.datasource || [],
+            title: Data.title,
+            contents: Data.datasource || [],
           };
         case "ArticleListWidget":
           return {
             ...webLinkProps,
-            datasource: componentData.Data.datasource || [],
+            datasource: Data.datasource || [],
           };
         case "SliderBannerWidget":
           return {
             ...webLinkProps,
-            contents: componentData.Data.datasource || [],
-            sliderOptions: componentData.Data.sliderOptions || "{}",
+            contents: Data.datasource || [],
+            sliderOptions: Data.sliderOptions || "{}",
           };
         case "SearchWidget":
           return {
             ...webLinkProps,
           };
         case "Widget":
-          if (componentData.Data.name === "HeaderPanel") {
-            const widgetContent = componentData.Data.datasource[0];
+          if (Data.name === "HeaderPanel") {
+            const widgetContent = Data.datasource[0];
             return {
               ...webLinkProps,
               logo: widgetContent.Data.image?.MediaUrl,
               logoAlt: widgetContent.Data.image?.AltText,
               description: widgetContent.Data.description,
             };
-          } else if (componentData.Data.name === "HeaderBar") {
-            const widgetContent = componentData.Data.datasource[0];
+          } else if (Data.name === "HeaderBar") {
+            const widgetContent = Data.datasource[0];
             return {
               ...webLinkProps,
               logo: widgetContent.Data.logo?.MediaUrl,
@@ -142,12 +140,12 @@ export default {
               navigationItemsId:
                 widgetContent.Data.navigationItems[0].ContentID,
             };
-          } else if (componentData.Data.name === "Breadcrumb") {
+          } else if (Data.name === "Breadcrumb") {
             return {
               ...webLinkProps,
             };
-          } else if (componentData.Data.name === "FooterBar") {
-            const widgetContent = componentData.Data.datasource[0];
+          } else if (Data.name === "FooterBar") {
+            const widgetContent = Data.datasource[0];
             return {
               ...webLinkProps,
               navigationItemsId:
@@ -155,8 +153,8 @@ export default {
               title: widgetContent.Data.websiteName,
               socialLinks: widgetContent.Data.socialMediaLinks,
             };
-          } else if (componentData.Data.name === "FooterPanel") {
-            const widgetContent = componentData.Data.datasource[0];
+          } else if (Data.name === "FooterPanel") {
+            const widgetContent = Data.datasource[0];
             return {
               ...webLinkProps,
               policyContents: widgetContent.Data.policyContents,
@@ -168,8 +166,10 @@ export default {
           break;
       }
     },
-    getComponentType(componentData) {
-      switch (componentData.TemplateName) {
+    getComponentType(component) {
+      const { Data, TemplateName } = component;
+
+      switch (TemplateName) {
         case "Page Article":
         case "Page":
           return Article;
@@ -190,15 +190,15 @@ export default {
         case "SearchWidget":
           return Search;
         case "Widget":
-          if (componentData.Data.name === "HeaderPanel") {
+          if (Data.name === "HeaderPanel") {
             return HeaderPanel;
-          } else if (componentData.Data.name === "HeaderBar") {
+          } else if (Data.name === "HeaderBar") {
             return HeaderBar;
-          } else if (componentData.Data.name === "Breadcrumb") {
+          } else if (Data.name === "Breadcrumb") {
             return Breadcrumb;
-          } else if (componentData.Data.name === "FooterBar") {
+          } else if (Data.name === "FooterBar") {
             return FooterBar;
-          } else if (componentData.Data.name === "FooterPanel") {
+          } else if (Data.name === "FooterPanel") {
             return FooterPanel;
           }
           break;
