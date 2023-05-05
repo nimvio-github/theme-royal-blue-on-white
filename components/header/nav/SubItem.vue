@@ -40,7 +40,7 @@ export default {
 }
 
 @media (min-width: 1024px) {
-  .navbar__subnav__link-mobile {
+  .navbar__subnav__link--mobile {
     display: none;
   }
 }

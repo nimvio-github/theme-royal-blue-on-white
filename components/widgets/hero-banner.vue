@@ -1,25 +1,21 @@
 <template>
-  <section class="banner-homepage" :style="heroStyle">
-    <div
-      class="text-center py-28 max-w-2xl px-4 sm:px-6 lg:px-8 mx-auto py-banner-custom max-width-custom"
-    >
+  <section :style="heroStyle">
+    <div class="homepage__hero">
       <h1
         v-if="props.title"
-        class="text-5xl font-extrabold tracking-tight text-royal-blue heading-1 text-blue-custom"
         data-kontent-component-id="title"
         :data-text="props.title"
         v-text="props.title"
       ></h1>
       <div
         v-if="props.description"
-        class="mt-8 text-royal-blue paragraph-1 text-blue-custom"
+        class="homepage__hero__text"
         data-kontent-component-id="description"
         v-html="props.description"
       ></div>
-      <div class="mt-8 mt-btn1-custom">
+      <div class="homepage__hero__button">
         <common-button-link
           v-if="props.button.text && props.button.to"
-          class="btn-orange"
           :to="props.button.to"
           data-kontent-component-id="buttonUrl"
           >{{ props.button.text }}</common-button-link
@@ -61,3 +57,44 @@ const heroStyle = computed(() => {
   };
 });
 </script>
+
+<style lang="scss">
+.homepage__hero {
+  text-align: center;
+  padding: 7rem 1rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  h1 {
+    color: $nimvio-blue;
+    letter-spacing: -0.025em;
+    font-weight: 800;
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.homepage__hero__text {
+  color: $nimvio-blue;
+  margin-top: 2rem;
+}
+
+.homepage__hero__button {
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .homepage__hero {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .homepage__hero {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+</style>

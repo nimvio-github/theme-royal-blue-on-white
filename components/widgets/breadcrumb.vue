@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-royal-blue text-light-white">
+  <div class="breadcrumb-wrapper">
     <common-container>
-      <nav class="py-4 overflow-x-auto">
-        <ul class="flex items-center">
+      <nav class="breadcrumb__navs">
+        <ul>
           <li
             v-for="(item, idx) in crumbs"
             :key="item.path"
@@ -10,8 +10,8 @@
           >
             <NuxtLink
               :to="item.to"
-              class="p-4 capitalize hover:opacity-80 truncate"
-              :class="idx == 0 && 'pl-0'"
+              class="breadcrumb__nav"
+              :class="idx == 0 && 'breadcrumb__nav--first-child'"
               >{{ item.text }}</NuxtLink
             >
           </li>
@@ -44,3 +44,33 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.breadcrumb-wrapper {
+  background-color: $nimvio-blue;
+  color: $nimvio-white;
+
+  .breadcrumb__navs {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    overflow-x: auto;
+
+    ul {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .breadcrumb__nav {
+    text-transform: capitalize;
+    padding: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .breadcrumb__nav--first-child {
+    padding-left: 0;
+  }
+}
+</style>

@@ -1,11 +1,11 @@
 <template>
-  <div class="container mx-auto py-8">
-    <div class="flex flex-col md:flex-row">
+  <div class="container footer-bar">
+    <div class="footer-bar__links">
       <NuxtLink to="/">
-        <h5 class="text-2xl font-bold py-4 text-white">{{ props.title }}</h5>
+        <h5 class="footer-bar__link-home">{{ props.title }}</h5>
       </NuxtLink>
-      <div class="flex-grow"></div>
-      <div class="flex gap-2 items-center -mx-3">
+      <div class="footer-bar__link-separator"></div>
+      <div class="footer-bar__links-social-media">
         <common-icon-link
           v-for="social in props.socialLinks"
           :key="social.ContentID"
@@ -15,14 +15,13 @@
           icon-size="1.5em"
           :to="social.Data.link"
           target="_blank"
-          class="text-dark-white hover:text-light-white p-3"
+          class="footer-bar__link-social-media"
           :aria-label="social.Data.type.toLowerCase()"
         />
       </div>
     </div>
-    <div
-      class="grid grid-flow-row auto-rows-fr md:grid-flow-col md:auto-cols-fr gap-4 md:gap-8 mt-8"
-    >
+
+    <div class="footer-bar__navs">
       <template v-for="item in data.items">
         <footer-nav-item
           v-if="item && item.isShow"
@@ -98,3 +97,61 @@ onBeforeMount(() => {
   });
 });
 </script>
+
+<style lang="scss">
+.footer-bar {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  .footer-bar__links {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-bar__link-home {
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .footer-bar__link-separator {
+    flex-grow: 1;
+  }
+
+  .footer-bar__links-social-media {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+  }
+
+  .footer-bar__link-social-media {
+    padding: 0.75rem;
+    color: $nimvio-white;
+  }
+
+  .footer-bar__navs {
+    display: grid;
+    margin-top: 2rem;
+    gap: 1rem;
+    grid-auto-rows: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-bar {
+    .footer-bar__links {
+      flex-direction: row;
+    }
+
+    .footer-bar__navs {
+      gap: 2rem;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+    }
+  }
+}
+</style>

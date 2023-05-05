@@ -13,14 +13,6 @@ export default defineNuxtConfig({
       projectId: "",
       pageContentId: "",
       styleContentId: "",
-      header: {
-        navContentId: "",
-        panelContentId: "",
-      },
-      footer: {
-        navContentId: "",
-        panelContentId: "",
-      },
     },
   },
   css: ["~/assets/styles/base.css", "@splidejs/vue-splide/css"],
@@ -54,6 +46,7 @@ export default defineNuxtConfig({
           content: "Nimvio Theme for Royal Blue on White",
         },
       ],
+      link: [{ rel: "stylesheet", href: "./variables.css" }],
     },
   },
   typescript: {

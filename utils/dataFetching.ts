@@ -127,7 +127,7 @@ export const getContentByPageSlug = async (
   try {
     const query = gql`
       query getContentByPageSlug {
-        content(templateName: "Page", data: {urlPath: "${slug}"}) {
+        content(data: {urlPath: "${slug}"}) {
           Name
           ContentID
           Data

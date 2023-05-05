@@ -1,30 +1,25 @@
 <template>
-  <NuxtLayout
-    :name="data.Data.layout[0].Data.layoutName"
-    :placeholders="data.Data.layout[0].Data.placeholders"
-  >
-    <template #main>
-      <common-breadcrumb />
-      <LazyCommonRefetchButton @click="refresh">
-        {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
-      </LazyCommonRefetchButton>
-      <!-- content for the main slot -->
+  <NuxtLayout :name="data ? data.Data.layoutName : 'default'">
+    <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
-        v-if="data.TemplateName === 'Page Article'"
-        :components="[data]"
+        :key="key"
+        :components="contents"
       ></component-renderer>
-      <component-renderer
-        v-else-if="
-          data.TemplateName !== 'Page Article' && data.Data.widgetContent
-        "
-        :components="data.Data.widgetContent"
-      ></component-renderer>
+    </template>
+
+    <LazyCommonRefetchButton @click="refresh">
+      {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
+    </LazyCommonRefetchButton>
+
+    <template #empty>
+      <CommonEmpty v-if="data" :show-empty="showEmpty" :data="data" />
     </template>
   </NuxtLayout>
 </template>
 
 <script setup>
 import { getContentByPageSlug } from "~~/utils/dataFetching";
+import transformContent from "~~/utils/transformContent";
 
 const route = useRoute();
 const currentPath = route.path;
@@ -39,9 +34,15 @@ const { data, refresh, pending } = await useAsyncData(
         deep: true,
       }
     );
-    return response;
+
+    return transformContent(response);
   }
 );
+
+const showEmpty = computed(() => {
+  const { Data } = data.value;
+  return !Data.layoutName && !Data.placeholder && !Data.contentTitle;
+});
 
 const updateContentById = (content, id, newContent, cache = {}) => {
   if (cache[content.ContentID]) return null;
@@ -79,12 +80,12 @@ onBeforeMount(() => {
       formData.formData
     );
     if (newContent) {
-      data.value = newContent;
+      data.value = transformContent(newContent);
     }
   });
 });
 
-// useHead({
-//   title: data.value?.Data.pageTitle,
-// });
+useHead({
+  title: data.value?.Data.pageTitle,
+});
 </script>

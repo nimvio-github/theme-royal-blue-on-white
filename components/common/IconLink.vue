@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink class="flex items-center">
+  <NuxtLink class="icon-link">
     <icon :name="`mdi:${iconName}`" :size="iconSize" />
   </NuxtLink>
 </template>
@@ -18,3 +18,10 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.icon-link {
+  display: flex;
+  align-items: center;
+}
+</style>

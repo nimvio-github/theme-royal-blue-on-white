@@ -1,34 +1,34 @@
 <!-- eslint-disable vue/no-v-model-argument -->
 <template>
   <section v-if="data && !pending" class="container">
-    <div class="flex items-center flex-col lg:flex-row gap-2 py-8">
-      <h2 class="text-2xl font-bold text-royal-blue">
+    <div class="search-summary">
+      <h2>
         {{
           `${data.totalItems} ${
             data.totalItems > 1 ? "results" : "result"
           } for '${route.query.q || ""}'`
         }}
       </h2>
-      <div class="grow"></div>
+      <div class="search-summary-separator"></div>
       <span v-if="showPagination">{{
         `Page ${state.page} of ${paginate.totalPages}`
       }}</span>
     </div>
-    <hr class="pb-5" />
-    <div class="flex flex-col gap-4">
+    <hr class="line-break" />
+    <div class="search__items">
       <div
         v-for="result in paginate.results"
         :key="result.ContentID"
-        class="pb-5"
+        class="line-break"
       >
         <!-- Hardcode the URL temporary -->
         <common-text-link :to="getRedirectRoutes(result)">
-          <h2 class="text-2xl text-royal-blue font-bold mb-5">
+          <h2 class="search__item__title">
             {{ result.Data.pageTitle }}
           </h2>
         </common-text-link>
         <p
-          class="line-clamp-4 mb-5"
+          class="search__item__content"
           v-html="highlightResult(result.Data.content, route.query.q || '')"
         ></p>
         <hr />
@@ -41,14 +41,12 @@
       :total-pages="paginate.totalPages"
     />
   </section>
-  <div v-else class="h-[50vh] flex items-center justify-center">
+  <div v-else class="search__loader">
     <common-loader />
   </div>
 </template>
 
 <script setup>
-// import config from "~~/helpers/config";
-
 const { public: config } = useRuntimeConfig();
 const route = useRoute();
 
@@ -180,3 +178,65 @@ const getRedirectRoutes = (item) => {
   }
 };
 </script>
+
+<style lang="scss">
+.search-summary {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  gap: 0.5rem;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    color: $nimvio-blue;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+.search-summary-separator {
+  display: flex;
+  flex-grow: 1;
+}
+
+.line-break {
+  padding-bottom: 1.25rem;
+}
+
+.search__items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.search__item__title {
+  color: $nimvio-blue;
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.search__item__content {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  margin-bottom: 1.25rem;
+}
+
+.search__loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+@media (min-width: 1024px) {
+  .search-summary {
+    flex-direction: row;
+  }
+}
+</style>
