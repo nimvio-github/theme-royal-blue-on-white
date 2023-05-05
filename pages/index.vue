@@ -22,7 +22,7 @@ import { getContentByPageSlug } from "~~/utils/dataFetching";
 import transformContent from "~~/utils/transformContent";
 
 const route = useRoute();
-const currentPath = route.path === "/" ? "/home" : route.path;
+const currentPath = route.path === "/" ? "/index" : route.path;
 
 const { data, refresh, pending } = await useAsyncData(
   route.path,
