@@ -105,7 +105,7 @@ onBeforeMount(() => {
             ? route.path.slice(0, -1)
             : route.path;
         currentPath !== targetRoute.route &&
-          router.push(targetRoute.route === "/index" ? "/" : targetRoute.route);
+          router.push(targetRoute.route === "/home" ? "/" : targetRoute.route);
       } else {
         router.push({
           path: stringToSlug(data.formData.name),

@@ -27,7 +27,7 @@ export const generateRoutes = async (nitroConfig) => {
       if (route) {
         console.log("adding page: ", route);
         if (!nitroConfig.dev)
-          nitroConfig.prerender.routes.push(route === "/index" ? "/" : route);
+          nitroConfig.prerender.routes.push(route === "/home" ? "/" : route);
         nitroConfig.runtimeConfig.public.routes.push({
           route,
           ContentID: page.ContentID,
