@@ -139,11 +139,22 @@ export const getContentByPageSlug = async (
     const response = await $client.request<
       ContentResponse<[ContentResponse<any>]>
     >(query);
-    if (option && option.deep && response[0] && response[0].Data) {
+
+    // Filter response to match exactly the string of urlPath
+    // Example:
+    //
+    // urlPath = '/create-content-template' will return multiple
+    // response if there are multiple pages with similar string
+    // pattern such as another page with urlPath = '/create-content'
+    const uniqueResponse = response.filter(
+      (data) => data.Data.urlPath === slug
+    );
+
+    if (option && option.deep && uniqueResponse[0] && uniqueResponse[0].Data) {
       const referenceCache = option.cache || globalCache;
-      const id = response[0].ContentID;
-      referenceCache[id] = response[0];
-      const responseData = response[0].Data;
+      const id = uniqueResponse[0].ContentID;
+      referenceCache[id] = uniqueResponse[0];
+      const responseData = uniqueResponse[0].Data;
       const responseDataKey = Object.keys(responseData);
       // Recursively fetch Reference Content
       for (const key of responseDataKey) {
@@ -170,7 +181,7 @@ export const getContentByPageSlug = async (
         }
       }
     }
-    return { data: response[0] };
+    return { data: uniqueResponse[0] };
   } catch (error) {
     console.log("error fetching slug ", slug, error);
     console.log("error :", error);
