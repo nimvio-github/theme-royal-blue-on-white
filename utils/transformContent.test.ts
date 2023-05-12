@@ -1,3 +1,4 @@
+import { describe, it, expect } from "vitest";
 import transformContent, {
   groupWidgets,
   appendContent2WidgetsData,
@@ -25,6 +26,7 @@ const content = {
         Data: { placeholder: "main", Name: "Banner" },
       },
     ],
+    templates: [],
     placeholder: "main",
     Name: "Homepage",
   },
@@ -143,6 +145,7 @@ describe("test add group widgets to content", () => {
         ],
         placeholder: "main",
         Name: "Homepage",
+        templates: [],
       },
     };
 
