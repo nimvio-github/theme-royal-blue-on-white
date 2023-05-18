@@ -1,5 +1,6 @@
 <template>
   <NuxtLayout :name="data.Data.layoutName ? data.Data.layoutName : 'default'">
+    <WidgetsBreadcrumb />
     <template v-for="(contents, key) in data?.widgets" #[key]>
       <component-renderer
         :key="key"

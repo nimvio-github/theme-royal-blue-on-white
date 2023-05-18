@@ -35,6 +35,8 @@ const { data, refresh, pending } = await useAsyncData(
       }
     );
 
+    console.log(response);
+
     return transformContent(response);
   }
 );

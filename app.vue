@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { getContentById } from "./utils/dataFetching";
-import { StylesData, StylesTemplate } from "./models/templates.model";
+// import { getContentById } from "./utils/dataFetching";
+// import { StylesData, StylesTemplate } from "./models/templates.model";
 import { ConfigRoute } from "./composables/getFullSlug";
 import stringToSlug from "./utils/stringToSlug";
 
@@ -28,68 +28,68 @@ const webLinkProps = {
   "data-kontent-language-codename": "default",
 };
 
-const { data: styleData } = await useAsyncData(
-  "app-style",
-  async ({ $gqlClient }) => {
-    const { data: response } = await getContentById<StylesTemplate>(
-      $gqlClient,
-      publicConfig.styleContentId,
-      { deep: true }
-    );
-    const pageData = response.Data;
+// const { data: styleData } = await useAsyncData(
+//   "app-style",
+//   async ({ $gqlClient }) => {
+//     const { data: response } = await getContentById<StylesTemplate>(
+//       $gqlClient,
+//       publicConfig.styleContentId,
+//       { deep: true }
+//     );
+//     const pageData = response.Data;
 
-    return {
-      pageData,
-      styles: pageData.styles,
-    };
-  }
-);
+//     return {
+//       pageData,
+//       styles: pageData.styles,
+//     };
+//   }
+// );
 
-const customStyles = computed(() => {
-  const styles = styleData.value.styles.map((style) => {
-    const styleObj = {
-      type: "text/css",
-      innerHTML: style.Data.internalCss
-        .replace(/<[^>]+>/g, "")
-        .replace(/&nbsp;/g, "")
-        .replace(/&quot;/g, '"')
-        .replace(/&gt;/g, ">"),
-    };
-    return styleObj;
-  });
-  return styles;
-});
+// const customStyles = computed(() => {
+//   const styles = styleData.value.styles.map((style) => {
+//     const styleObj = {
+//       type: "text/css",
+//       innerHTML: style.Data.internalCss
+//         .replace(/<[^>]+>/g, "")
+//         .replace(/&nbsp;/g, "")
+//         .replace(/&quot;/g, '"')
+//         .replace(/&gt;/g, ">"),
+//     };
+//     return styleObj;
+//   });
+//   return styles;
+// });
 
-const customLinks = computed(() => {
-  const links = [];
-  styleData.value.styles.forEach((style) => {
-    // Add style from externalCss
-    if (style.Data.externalCss && typeof style.Data.externalCss === "string") {
-      links.push({
-        rel: "stylesheet",
-        as: "style",
-        href: style.Data.externalCss,
-      });
-    }
-    const formattedFonts = style.Data.fonts.map((font) => {
-      const fontObj = {
-        rel: "stylesheet",
-        as: "style",
-        href: font.Data.linkUrl,
-      };
-      return fontObj;
-    });
-    links.push(...formattedFonts);
-  });
-  return links;
-});
+// const customLinks = computed(() => {
+//   const links = [];
+//   styleData.value.styles.forEach((style) => {
+//     // Add style from externalCss
+//     if (style.Data.externalCss && typeof style.Data.externalCss === "string") {
+//       links.push({
+//         rel: "stylesheet",
+//         as: "style",
+//         href: style.Data.externalCss,
+//       });
+//     }
+//     const formattedFonts = style.Data.fonts.map((font) => {
+//       const fontObj = {
+//         rel: "stylesheet",
+//         as: "style",
+//         href: font.Data.linkUrl,
+//       };
+//       return fontObj;
+//     });
+//     links.push(...formattedFonts);
+//   });
+//   return links;
+// });
 
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
-  $nimvioSdk.livePreviewUtils.onPreviewContentChange<StylesData>((formData) => {
-    if (formData.id === publicConfig.styleContentId) {
-      styleData.value.styles = formData.formData.styles;
-    }
+  $nimvioSdk.livePreviewUtils.onPreviewContentChange(() => {
+    // if (formData.id === publicConfig.styleContentId) {
+    //   styleData.value.styles = formData.formData.styles;
+    // }
   });
 
   // Open the content page when the content is opened inside the Nimvio
@@ -135,7 +135,7 @@ useHead(() => ({
   bodyAttrs: {
     class: "font-sans text-dark-gray",
   },
-  style: [...customStyles.value],
-  link: [...customLinks.value],
+  // style: [...customStyles.value],
+  // link: [...customLinks.value],
 }));
 </script>

@@ -1,0 +1,34 @@
+
+*[data-nimvio-template-name="Page"] {
+	.article__date {
+		display: none;
+	}
+}
+
+.project-image-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.25rem;
+
+	figure {
+		border-radius: 0.5rem;
+		border: 3px solid rgba($nimvio-blue, 0.8);
+		overflow: hidden;
+		margin-top: 0;
+		margin-bottom: 0;
+		transition: 0.2s ease;
+		height: fit-content;
+
+		&:hover {
+			border: 3px solid rgba($nimvio-blue, 1);
+		}
+
+		img {
+			margin: 0;
+		}
+
+		span[title="resize"], figcaption {
+			display: none;
+		}
+	}
+}

@@ -2,7 +2,7 @@ import { generateRoutes } from "./utils/generateRoutes";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
   runtimeConfig: {
     // Update these values via Environment Variables
     // e.g NUXT_PUBLIC_HOST_URL or NUXT_PUBLIC_APICD_URL
@@ -15,7 +15,11 @@ export default defineNuxtConfig({
       styleContentId: "",
     },
   },
-  css: ["~/assets/styles/base.css", "@splidejs/vue-splide/css"],
+  css: [
+    "~/assets/styles/base.css",
+    "~/assets/styles/global.scss",
+    "@splidejs/vue-splide/css",
+  ],
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@nuxt/image-edge"],
   tailwindcss: {
     exposeConfig: true,
