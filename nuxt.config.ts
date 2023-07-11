@@ -13,6 +13,7 @@ export default defineNuxtConfig({
       projectId: "",
       pageContentId: "",
       styleContentId: "",
+      previewToken: "",
     },
   },
   css: ["~/assets/styles/base.css", "@splidejs/vue-splide/css"],
