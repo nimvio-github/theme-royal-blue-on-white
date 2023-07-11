@@ -20,7 +20,17 @@
             month: "long",
             day: "numeric",
           })
-        }}
+        }}. Powered by&nbsp;
+        <a
+          class="logo-nimvio"
+          aria-label="Nimvio"
+          href="https://nimvio.com"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          <!-- <span>N</span>imvio -->
+          <img src="/logo-nimvio.png" alt="nimvio.com" />
+        </a>
       </div>
     </div>
   </div>
@@ -70,5 +80,13 @@ const props = defineProps({
       gap: 2rem;
     }
   }
+}
+
+.logo-nimvio {
+  color: #2e2774;
+  background-color: white;
+  padding: 4px 7px;
+  border-radius: 2px;
+  margin-left: 4px;
 }
 </style>
