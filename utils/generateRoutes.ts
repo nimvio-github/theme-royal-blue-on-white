@@ -6,10 +6,13 @@ export const generateRoutes = async (nitroConfig) => {
   const projectId = process.env.NUXT_PUBLIC_PROJECT_ID;
   const APICD_URL = process.env.NUXT_PUBLIC_APICD_URL;
   const pageContentId = process.env.NUXT_PUBLIC_PAGE_CONTENT_ID;
+  const previewToken = process.env.NUXT_PUBLIC_PREVIEW_TOKEN;
 
   const endpoint = `${APICD_URL}/${projectId}`;
 
-  const client = new GraphQLClient(endpoint, { headers: {} });
+  const client = new GraphQLClient(endpoint, {
+    headers: { Authorization: previewToken },
+  });
   // if (nitroConfig.dev) {
   //   return;
   // }
