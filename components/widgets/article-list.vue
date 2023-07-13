@@ -77,7 +77,7 @@ const props = defineProps({
 const route = useRoute();
 
 // Fetch Contents Data
-const { data } = await useAsyncData(
+const { data, refresh } = await useAsyncData(
   `articleList-${route.path}`,
   async ({ $gqlClient }) => {
     let contents = [];
@@ -94,6 +94,23 @@ const { data } = await useAsyncData(
   }
 );
 
+// get latest saved content from preview api
+const resetData = ref(false);
+const showSyncOverlay = ref(false);
+const config = useRuntimeConfig();
+const { PREVIEW_API_URL, projectId } = config.public;
+const { $gqlClient } = useNuxtApp();
+const endpoint = `${PREVIEW_API_URL}/${projectId}`;
+const syncContent = async () => {
+  if (showSyncOverlay.value === false) {
+    showSyncOverlay.value = true;
+    $gqlClient.setEndpoint(endpoint);
+    resetData.value = true;
+    await refresh();
+    showSyncOverlay.value = false;
+  }
+};
+
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
   $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
@@ -103,6 +120,10 @@ onBeforeMount(() => {
       }
       return item;
     });
+  });
+
+  $nimvioSdk.livePreviewUtils.onSyncPreviewContent(() => {
+    syncContent();
   });
 });
 

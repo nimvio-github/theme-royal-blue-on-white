@@ -55,28 +55,48 @@ const props = defineProps({
   },
 });
 
-const { data } = await useAsyncData("footerBar", async ({ $gqlClient }) => {
-  const { data: pages } = await getChildPages(
-    $gqlClient,
-    props.navigationItemsId
-  );
-  const items = pages.map((page) => {
-    const pageData = page.Data;
+const { data, refresh } = await useAsyncData(
+  "footerBar",
+  async ({ $gqlClient }) => {
+    const { data: pages } = await getChildPages(
+      $gqlClient,
+      props.navigationItemsId
+    );
+    const items = pages.map((page) => {
+      const pageData = page.Data;
+
+      return {
+        text: pageData.navigationTitle || pageData.pageTitle,
+        to: pageData.pageSlug,
+        navigationTitle: pageData.navigationTitle,
+        children: [],
+        isShow: pageData.navigation.showInMenu,
+        ...page,
+      };
+    });
 
     return {
-      text: pageData.navigationTitle || pageData.pageTitle,
-      to: pageData.pageSlug,
-      navigationTitle: pageData.navigationTitle,
-      children: [],
-      isShow: pageData.navigation.showInMenu,
-      ...page,
+      items,
     };
-  });
+  }
+);
 
-  return {
-    items,
-  };
-});
+// get latest saved content from preview api
+const resetData = ref(false);
+const showSyncOverlay = ref(false);
+const config = useRuntimeConfig();
+const { PREVIEW_API_URL, projectId } = config.public;
+const { $gqlClient } = useNuxtApp();
+const endpoint = `${PREVIEW_API_URL}/${projectId}`;
+const syncContent = async () => {
+  if (showSyncOverlay.value === false) {
+    showSyncOverlay.value = true;
+    $gqlClient.setEndpoint(endpoint);
+    resetData.value = true;
+    await refresh();
+    showSyncOverlay.value = false;
+  }
+};
 
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
@@ -94,6 +114,10 @@ onBeforeMount(() => {
       }
       return item;
     });
+  });
+
+  $nimvioSdk.livePreviewUtils.onSyncPreviewContent(() => {
+    syncContent();
   });
 });
 </script>
