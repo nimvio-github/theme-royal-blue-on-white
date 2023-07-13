@@ -20,12 +20,14 @@ const globalCache = {};
  * @param $client GraphQL client from custom graphql-request plugin
  * @param id ContentID that will be fetched
  * @param deep Fetch all reference type inside the response
+ * @param reset Force the data to not using global cache, useful for sync feature
  * @returns
  */
 export const getContentById = async <TemplateData>(
   $client: GraphQLClient,
   id: string,
-  option?: fetchOptions
+  option?: fetchOptions,
+  reset: boolean = false
 ): Promise<{ data: TemplateData }> => {
   try {
     const query = /* GraphQL */ `
@@ -57,7 +59,7 @@ export const getContentById = async <TemplateData>(
         ) {
           responseData[key] = await Promise.all(
             responseData[key].ContentIDs.map(async (contentId) => {
-              if (referenceCache[contentId]) {
+              if (!reset && referenceCache[contentId]) {
                 return referenceCache[contentId];
               } else {
                 const { data } = await getContentById($client, contentId, {
@@ -103,6 +105,7 @@ export const getChildPages = async (
       }
     `;
     const response = await $client.request<ContentResponse<any>[]>(query);
+
     return {
       data: response,
     };
@@ -116,12 +119,14 @@ export const getChildPages = async (
  * Get Content By Page Slug
  * @param $client GraphQL client from custom graphql-request plugin
  * @param slug Page slug that will be fetched
+ * @param reset Force the data to not using global cache, useful for sync feature
  * @returns
  */
 export const getContentByPageSlug = async (
   $client: GraphQLClient,
   slug: string,
-  option?: fetchOptions
+  option?: fetchOptions,
+  reset: boolean = false
 ) => {
   // TODO: Change urlPath into pageSlug after the BE is finished on updating the text slug component validation
   try {
@@ -166,7 +171,7 @@ export const getContentByPageSlug = async (
         ) {
           responseData[key] = await Promise.all(
             responseData[key].ContentIDs.map(async (contentId) => {
-              if (referenceCache[contentId]) {
+              if (!reset && referenceCache[contentId]) {
                 return referenceCache[contentId];
               } else {
                 const { data } = await getContentById($client, contentId, {

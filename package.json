@@ -13,7 +13,7 @@
     "test:unit": "vitest run --reporter junit --outputFile junit.xml && vitest run --coverage.reporter clover --outputFile coverage.xml --run --coverage"
   },
   "devDependencies": {
-    "@nimvio/live-preview-sdk": "^0.1.1",
+    "@nimvio/live-preview-sdk": "^0.1.4",
     "@nuxt/image-edge": "^1.0.0-27719579.87dcdf2",
     "@nuxtjs/eslint-config-typescript": "^11.0.0",
     "@nuxtjs/style-resources": "^1.2.1",

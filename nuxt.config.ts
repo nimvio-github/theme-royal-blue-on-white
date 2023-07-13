@@ -10,6 +10,7 @@ export default defineNuxtConfig({
       hostURL: "http://localhost:500",
       APICD_URL: "",
       APIES_URL: "",
+      PREVIEW_API_URL: "",
       projectId: "",
       pageContentId: "",
       styleContentId: "",

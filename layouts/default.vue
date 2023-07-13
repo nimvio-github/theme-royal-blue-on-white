@@ -15,6 +15,8 @@
     <footer class="footer">
       <slot name="footer"> </slot>
     </footer>
+
+    <slot></slot>
   </div>
 </template>
 

@@ -119,7 +119,6 @@ onBeforeMount(() => {
   });
 
   $nimvioSdk.livePreviewUtils.onNewPreviewContent<any>((data) => {
-    console.log("onNewPreviewContent", data);
     router.push({
       path: stringToSlug(data.formData.name),
       query: {

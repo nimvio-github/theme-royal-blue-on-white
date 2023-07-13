@@ -7,13 +7,11 @@
       ></component-renderer>
     </template>
 
-    <LazyCommonRefetchButton @click="refresh">
-      {{ data && !pending ? "Fetch Newest Data" : "Fetching data..." }}
-    </LazyCommonRefetchButton>
-
     <template #empty>
       <CommonEmpty v-if="data" :show-empty="showEmpty" :data="data" />
     </template>
+
+    <CommonSyncOverlay v-if="showSyncOverlay" />
   </NuxtLayout>
 </template>
 
@@ -23,8 +21,9 @@ import transformContent from "~~/utils/transformContent";
 
 const route = useRoute();
 const currentPath = route.path;
+const resetData = ref(false);
 
-const { data, refresh, pending } = await useAsyncData(
+const { data, refresh } = await useAsyncData(
   currentPath,
   async ({ $gqlClient }) => {
     // If it is inside the iframe (has isNewPage and contentId query), fetch using contentId
@@ -34,7 +33,8 @@ const { data, refresh, pending } = await useAsyncData(
         route.query.contentId,
         {
           deep: true,
-        }
+        },
+        resetData
       );
 
       return transformContent(newResponse);
@@ -44,7 +44,8 @@ const { data, refresh, pending } = await useAsyncData(
       currentPath,
       {
         deep: true,
-      }
+      },
+      resetData
     );
 
     return transformContent(response);
@@ -83,6 +84,22 @@ const updateContentById = (content, id, newContent, cache = {}) => {
   return content;
 };
 
+// get latest saved content from preview api
+const showSyncOverlay = ref(false);
+const config = useRuntimeConfig();
+const { PREVIEW_API_URL, projectId } = config.public;
+const { $gqlClient } = useNuxtApp();
+const endpoint = `${PREVIEW_API_URL}/${projectId}`;
+const syncContent = async () => {
+  if (showSyncOverlay.value === false) {
+    showSyncOverlay.value = true;
+    $gqlClient.setEndpoint(endpoint);
+    resetData.value = true;
+    await refresh();
+    showSyncOverlay.value = false;
+  }
+};
+
 const { $nimvioSdk } = useNuxtApp();
 onBeforeMount(() => {
   $nimvioSdk.livePreviewUtils.onPreviewContentChange((formData) => {
@@ -94,6 +111,10 @@ onBeforeMount(() => {
     if (newContent) {
       data.value = transformContent(newContent);
     }
+  });
+
+  $nimvioSdk.livePreviewUtils.onSyncPreviewContent(() => {
+    syncContent();
   });
 });
 
