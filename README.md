@@ -49,6 +49,7 @@ NUXT_PUBLIC_PROJECT_ID=Project_832c2b2d-0757-4a0b-b136-bfe388c664d4
 NUXT_PUBLIC_PAGE_CONTENT_ID=Content_da6e1b38-02d2-4302-90bb-36a4a8b1720b
 NUXT_PUBLIC_STYLE_CONTENT_ID=Content_b459b0b0-e121-414e-8d87-878ae48d1f9a
 ```
+![Screenshots of Environment Variables Content](environment-variables.jpg)
 
 ## Commands
 
