@@ -1,8 +1,9 @@
 import { generateRoutes } from "./utils/generateRoutes";
+const isProduction = process.env.NODE_ENV === "production";
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: isProduction,
   runtimeConfig: {
     // Update these values via Environment Variables
     // e.g NUXT_PUBLIC_HOST_URL or NUXT_PUBLIC_APICD_URL
